@@ -13,7 +13,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [ForeignKey(nameof(Family))]
         public int FamilyId { get; set; }
 
         public virtual Family Family { get; set; }
@@ -23,7 +22,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         [MaxLength(64)]
         public string Name { get; set; }
 
-        [ForeignKey(nameof(Member))]
         public int? MemberId { get; set; }
 
         public virtual FamilyMember Member { get; set; }

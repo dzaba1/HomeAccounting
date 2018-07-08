@@ -15,12 +15,11 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
 
-        [ForeignKey(nameof(Family))]
         public int FamilyId { get; set; }
 
         public virtual Family Family { get; set; }
 
-        public ICollection<Operation> Operations { get; set; }
+        public virtual ICollection<Operation> Operations { get; set; }
 
         public virtual ICollection<ScheduledOperation> ScheduledOperation { get; set; }
     }

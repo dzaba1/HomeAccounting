@@ -14,7 +14,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual ICollection<Operation> Operations { get; set; }
 
-        [ForeignKey(nameof(Family))]
         public int FamilyId { get; set; }
 
         public virtual Family Family { get; set; }

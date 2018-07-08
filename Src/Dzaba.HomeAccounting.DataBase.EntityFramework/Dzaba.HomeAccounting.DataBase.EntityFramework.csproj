@@ -13,9 +13,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj" />
     <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.Contracts\Dzaba.HomeAccounting.DataBase.Contracts.csproj" />
     <ProjectReference Include="..\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DAL\" />
   </ItemGroup>
 
 </Project>

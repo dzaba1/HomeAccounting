@@ -11,7 +11,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [MaxLength(64)]
+        [MaxLength(128)]
         [Required(AllowEmptyStrings = false)]
         public string Name { get; set; }
 

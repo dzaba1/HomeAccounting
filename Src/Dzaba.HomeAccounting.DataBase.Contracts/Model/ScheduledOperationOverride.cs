@@ -6,13 +6,11 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
     [Table("ScheduledOperationOverrides")]
     public class ScheduledOperationOverride
     {
-        [ForeignKey(nameof(Month))]
         [Key]
         public int MonthId { get; set; }
 
         public virtual Month Month { get; set; }
 
-        [ForeignKey(nameof(Operation))]
         [Key]
         public int OperationId { get; set; }
 
