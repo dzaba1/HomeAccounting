@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Utils"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Contracts", "Src\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj", "{300A39C2-DE8B-46E0-8417-EB8FF18CDD89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.DataBase.EntityFramework", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework\Dzaba.HomeAccounting.DataBase.EntityFramework.csproj", "{933795E8-CE3C-4792-99F2-73FF558F3B95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.DataBase.EntityFramework", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework\Dzaba.HomeAccounting.DataBase.EntityFramework.csproj", "{933795E8-CE3C-4792-99F2-73FF558F3B95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite.csproj", "{29C250B4-C82B-412B-B71C-16712DDF888C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29C250B4-C82B-412B-B71C-16712DDF888C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29C250B4-C82B-412B-B71C-16712DDF888C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29C250B4-C82B-412B-B71C-16712DDF888C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29C250B4-C82B-412B-B71C-16712DDF888C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
