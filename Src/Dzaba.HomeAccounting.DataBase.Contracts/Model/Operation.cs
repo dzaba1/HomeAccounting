@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dzaba.HomeAccounting.Contracts;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 {
-    [Table("FamilyOperations")]
-    public class Operation : IEntity<int>
+    [Table("Operations")]
+    public class Operation : IOperation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -32,5 +33,18 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public virtual FamilyMember Member { get; set; }
 
         public DateTime? DateTime { get; set; }
+
+        public OperationReport ToOperationReport()
+        {
+            return new OperationReport
+            {
+                Amount = Amount,
+                Id = Id,
+                Name = Name,
+                IsScheduled = false,
+                DateTime = DateTime,
+                IsOverriden = false
+            };
+        }
     }
 }

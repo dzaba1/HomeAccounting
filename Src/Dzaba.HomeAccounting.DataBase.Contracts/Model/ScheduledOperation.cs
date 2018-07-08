@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dzaba.HomeAccounting.Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 {
     [Table("ScheduledOperations")]
-    public class ScheduledOperation : IEntity<int>
+    public class ScheduledOperation : IOperation
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -32,5 +33,16 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public DateTime? Ends { get; set; }
 
         public virtual ICollection<ScheduledOperationOverride> Overrides { get; set; }
+
+        public OperationReport ToOperationReport()
+        {
+            return new OperationReport
+            {
+                Amount = Amount,
+                Id = Id,
+                Name = Name,
+                IsScheduled = true
+            };
+        }
     }
 }

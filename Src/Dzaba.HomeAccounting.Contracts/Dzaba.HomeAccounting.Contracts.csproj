@@ -12,12 +12,4 @@
     <OutputPath>..\..\bin\Release</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj" />
-  </ItemGroup>
-
 </Project>

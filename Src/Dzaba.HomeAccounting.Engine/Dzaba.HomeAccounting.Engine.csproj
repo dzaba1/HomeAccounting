@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj" />
     <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.Contracts\Dzaba.HomeAccounting.DataBase.Contracts.csproj" />
     <ProjectReference Include="..\Dzaba.HomeAccounting.Engine.Utils\Dzaba.HomeAccounting.Engine.Utils.csproj" />
   </ItemGroup>
