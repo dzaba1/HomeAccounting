@@ -1,7 +1,7 @@
 ﻿using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
-using Dzaba.HomeAccounting.Engine.Utils;
+using Dzaba.HomeAccounting.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;

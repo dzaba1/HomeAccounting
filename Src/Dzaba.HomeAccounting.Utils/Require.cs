@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Dzaba.HomeAccounting.Engine.Utils
+namespace Dzaba.HomeAccounting.Utils
 {
     public static class Require
     {

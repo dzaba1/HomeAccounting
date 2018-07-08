@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.DataBa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Engine", "Src\Dzaba.HomeAccounting.Engine\Dzaba.HomeAccounting.Engine.csproj", "{B375AB90-31B5-4BFE-BD34-8E10EC2851D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Engine.Utils", "Src\Dzaba.HomeAccounting.Engine.Utils\Dzaba.HomeAccounting.Engine.Utils.csproj", "{F7A3D539-6AF9-411E-B387-65E253CD07F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Utils", "Src\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj", "{F7A3D539-6AF9-411E-B387-65E253CD07F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.Contracts", "Src\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj", "{300A39C2-DE8B-46E0-8417-EB8FF18CDD89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Contracts", "Src\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj", "{300A39C2-DE8B-46E0-8417-EB8FF18CDD89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.DataBase.EntityFramework", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework\Dzaba.HomeAccounting.DataBase.EntityFramework.csproj", "{933795E8-CE3C-4792-99F2-73FF558F3B95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{300A39C2-DE8B-46E0-8417-EB8FF18CDD89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{300A39C2-DE8B-46E0-8417-EB8FF18CDD89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{300A39C2-DE8B-46E0-8417-EB8FF18CDD89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933795E8-CE3C-4792-99F2-73FF558F3B95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
