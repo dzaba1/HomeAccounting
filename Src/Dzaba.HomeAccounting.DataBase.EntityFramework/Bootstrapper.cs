@@ -1,5 +1,7 @@
 ﻿using Dzaba.HomeAccounting.DataBase.Contracts;
+using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Configuration;
+using Dzaba.HomeAccounting.DataBase.EntityFramework.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,6 +21,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 
             container.AddTransient<IDatabaseContextFactory, DatabaseContextFactory>();
             container.AddTransient<IDbInitializer, DbInitalizer>();
+            container.AddTransient<IFamilyDal, FamilyDal>();
 
             container.AddDbContext<DatabaseContext>(OptionsHandler, ServiceLifetime.Transient, ServiceLifetime.Transient);
         }

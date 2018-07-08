@@ -8,26 +8,11 @@ using Dzaba.HomeAccounting.DataBase.Contracts;
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
     [TestFixture]
-    public class DbInitalizerTests
+    public class DbInitalizerTests : IntegrationTestFixutre
     {
-        public IServiceProvider container;
-
-        [SetUp]
-        public void Setup()
-        {
-            DbUtils.Delete();
-            container = Bootstrapper.CreateContainer();
-        }
-
-        [TearDown]
-        public void Cleanup()
-        {
-            DbUtils.Delete();
-        }
-
         private IDbInitializer CreateSut()
         {
-            return container.GetRequiredService<IDbInitializer>();
+            return Container.GetRequiredService<IDbInitializer>();
         }
 
         [Test]

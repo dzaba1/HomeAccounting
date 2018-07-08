@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DAL\" />
-  </ItemGroup>
-
 </Project>

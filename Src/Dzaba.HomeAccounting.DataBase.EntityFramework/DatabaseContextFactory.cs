@@ -22,7 +22,9 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 
         public DatabaseContext Create()
         {
-            return container.GetRequiredService<DatabaseContext>();
+            var dbContext = container.GetRequiredService<DatabaseContext>();
+            dbContext.Database.EnsureCreated();
+            return dbContext;
         }
     }
 }

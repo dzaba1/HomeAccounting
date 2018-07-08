@@ -157,6 +157,8 @@
     <Compile Include="ConnectionStringProvider.cs" />
     <Compile Include="DbInitalizerTests.cs" />
     <Compile Include="DbUtils.cs" />
+    <Compile Include="FamilyDalTests.cs" />
+    <Compile Include="IntegrationTestFixutre.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
