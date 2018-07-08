@@ -17,13 +17,16 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
             container.AddTransient<IEntityConfiguration, ScheduledOperationConfiguration>();
             container.AddTransient<IEntityConfiguration, ScheduledOperationOverrideConfiguration>();
 
+            container.AddTransient<IDatabaseContextFactory, DatabaseContextFactory>();
+            container.AddTransient<IDbInitializer, DbInitalizer>();
+
             container.AddDbContext<DatabaseContext>(OptionsHandler, ServiceLifetime.Transient, ServiceLifetime.Transient);
         }
 
         private static void OptionsHandler(IServiceProvider container, DbContextOptionsBuilder optionsBuilder)
         {
-            var provider = container.GetService<IEntityFrameworkProvider>();
-            var connectionStringProvider = container.GetService<IConnectionStringProvider>();
+            var provider = container.GetRequiredService<IEntityFrameworkProvider>();
+            var connectionStringProvider = container.GetRequiredService<IConnectionStringProvider>();
 
             optionsBuilder.UseLazyLoadingProxies();
             provider.Register(connectionStringProvider.GetConnectionString(), optionsBuilder);

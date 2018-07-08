@@ -7,5 +7,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
     {
         Task<string> GetNameAsync(int familyId);
         Task<Dictionary<int, string>> GetMemberNamesAsync(int familyId);
+        Task<int> AddFamilyAsync(string name, IEnumerable<string> members);
     }
 }

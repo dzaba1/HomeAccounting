@@ -3,11 +3,12 @@ using NUnit.Framework;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using FluentAssertions;
+using Dzaba.HomeAccounting.DataBase.Contracts;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
     [TestFixture]
-    public class DbInitTests
+    public class DbInitalizerTests
     {
         public IServiceProvider container;
 
@@ -24,13 +25,16 @@ namespace Dzaba.HomeAccounting.IntegrationTests
             DbUtils.Delete();
         }
 
-        [Test]
-        public void DbCanBeInitialized()
+        private IDbInitializer CreateSut()
         {
-            using (var db = container.GetService<DatabaseContext>())
-            {
-                db.Database.EnsureCreated().Should().BeTrue();
-            }
+            return container.GetRequiredService<IDbInitializer>();
+        }
+
+        [Test]
+        public void InitializeAsync_WhenCalled_ThenItMakesADb()
+        {
+            var sut = CreateSut();
+            sut.InitializeAsync().Wait();
         }
     }
 }

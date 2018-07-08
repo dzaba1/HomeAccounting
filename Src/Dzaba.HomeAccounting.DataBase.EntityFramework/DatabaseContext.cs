@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 {
-    public class DatabaseContext : DbContext
+    internal class DatabaseContext : DbContext
     {
         private readonly IEntityConfiguration[] entityConfigurations;
 

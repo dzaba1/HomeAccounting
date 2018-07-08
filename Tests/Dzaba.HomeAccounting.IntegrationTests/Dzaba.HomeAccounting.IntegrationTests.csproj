@@ -155,7 +155,7 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="ConnectionStringProvider.cs" />
-    <Compile Include="DbInitTests.cs" />
+    <Compile Include="DbInitalizerTests.cs" />
     <Compile Include="DbUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
