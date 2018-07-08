@@ -4,6 +4,6 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 {
     public interface IEntityFrameworkProvider
     {
-        void Register(DbContextOptionsBuilder optionsBuilder);
+        void Register(string connectionString, DbContextOptionsBuilder optionsBuilder);
     }
 }
