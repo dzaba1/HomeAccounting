@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite
 {
-    internal sealed class SqliteProvider : IEntityFrameworkProvider
+    public sealed class SqliteProvider : IEntityFrameworkProvider
     {
          public void Register(string connectionString, DbContextOptionsBuilder optionsBuilder)
         {
