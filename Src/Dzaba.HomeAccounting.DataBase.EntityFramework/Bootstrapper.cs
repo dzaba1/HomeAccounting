@@ -22,6 +22,9 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
             container.AddTransient<IDatabaseContextFactory, DatabaseContextFactory>();
             container.AddTransient<IDbInitializer, DbInitalizer>();
             container.AddTransient<IFamilyDal, FamilyDal>();
+            container.AddTransient<IMonthDal, MonthDal>();
+            container.AddTransient<IOperationDal, OperationDal>();
+            container.AddTransient<IScheduledOperationDal, ScheduledOperationDal>();
 
             container.AddDbContext<DatabaseContext>(OptionsHandler, ServiceLifetime.Transient, ServiceLifetime.Transient);
         }

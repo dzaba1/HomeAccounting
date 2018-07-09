@@ -7,5 +7,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
     public interface IMonthDal
     {
         Task<Month[]> GetMonthsAsync(int familyId, DateTime start, DateTime end);
+        Task<int> AddMonthAsync(Month month);
     }
 }

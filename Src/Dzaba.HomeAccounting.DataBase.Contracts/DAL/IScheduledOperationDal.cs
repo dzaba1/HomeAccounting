@@ -6,6 +6,8 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
     public interface IScheduledOperationDal
     {
         Task<ScheduledOperation[]> GetAllAsync(int familyId);
-        Task<OperationOverride[]> GetOverridesForMonth(int monthId);
+        Task<OperationOverride[]> GetOverridesForMonthAsync(int monthId);
+        Task<int> AddScheduledOperationAsync(ScheduledOperation operation);
+        Task OverrideAsync(int monthId, int operationId, decimal amount);
     }
 }

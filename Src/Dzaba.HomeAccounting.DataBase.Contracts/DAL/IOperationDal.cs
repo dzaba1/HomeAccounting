@@ -6,5 +6,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
     public interface IOperationDal
     {
         Task<Operation[]> GetOperationsAsync(int monthId);
+        Task<int> AddOperationAsync(Operation operation);
     }
 }

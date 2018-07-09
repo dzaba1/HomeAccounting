@@ -46,7 +46,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             }
         }
 
-        public async Task<Family> GetFamily(int familyId)
+        public async Task<Family> GetFamilyAsync(int familyId)
         {
             using (var dbContext = dbContextFactory.Create())
             {

@@ -141,7 +141,7 @@ namespace Dzaba.HomeAccounting.Engine
         private async Task<decimal> CheckOperationOverridesAsync(Month month, decimal income, ScheduledOperation[] scheduledOperations, MonthReport report)
         {
             var currentIncome = income;
-            var overrides = await scheduledOperationDal.GetOverridesForMonth(month.Id);
+            var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(month.Id);
             foreach (var overrideEntry in overrides)
             {
                 if (overrideEntry.MemberId.HasValue)
