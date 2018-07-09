@@ -13,6 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj" />
     <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.Contracts\Dzaba.HomeAccounting.DataBase.Contracts.csproj" />
     <ProjectReference Include="..\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj" />

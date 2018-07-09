@@ -1,18 +1,12 @@
 ﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
     [TestFixture]
-    public class FamilyDalTests : IntegrationTestFixutre
+    public class FamilyDalTests : IntegrationTestFixutre<IFamilyDal>
     {
-        private IFamilyDal CreateSut()
-        {
-            return Container.GetRequiredService<IFamilyDal>();
-        }
-
         [Test]
         public void AddFamily_WhenFamilyAdded_ThenItCanBeSelected()
         {

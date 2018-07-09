@@ -1,9 +1,10 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework;
 using System;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
-    public class IntegrationTestFixutre
+    public class IntegrationTestFixutre<T>
     {
         protected IServiceProvider Container { get; private set; }
 
@@ -18,6 +19,16 @@ namespace Dzaba.HomeAccounting.IntegrationTests
         public void Cleanup()
         {
             DbUtils.Delete();
+        }
+
+        protected T CreateSut()
+        {
+            return Container.GetRequiredService<T>();
+        }
+
+        protected IInvokerDal GetInvokerDal()
+        {
+            return Container.GetRequiredService<IInvokerDal>();
         }
     }
 }

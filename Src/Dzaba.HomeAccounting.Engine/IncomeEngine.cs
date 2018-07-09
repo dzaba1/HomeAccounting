@@ -233,7 +233,7 @@ namespace Dzaba.HomeAccounting.Engine
             while (end >= current)
             {
                 yield return current.Date;
-                current.AddMonths(1);
+                current = current.AddMonths(1);
             }
         }
     }
