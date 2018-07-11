@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Dzaba.HomeAccounting.DataBase.Contracts;
+using System.Threading.Tasks;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
@@ -7,10 +8,10 @@ namespace Dzaba.HomeAccounting.IntegrationTests
     public class DbInitalizerTests : IntegrationTestFixutre<IDbInitializer>
     {
         [Test]
-        public void InitializeAsync_WhenCalled_ThenItMakesADb()
+        public async Task InitializeAsync_WhenCalled_ThenItMakesADb()
         {
             var sut = CreateSut();
-            sut.InitializeAsync().Wait();
+            await sut.InitializeAsync();
         }
     }
 }

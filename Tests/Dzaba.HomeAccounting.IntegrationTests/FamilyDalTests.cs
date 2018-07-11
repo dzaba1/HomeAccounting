@@ -1,6 +1,7 @@
 ﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
@@ -8,13 +9,13 @@ namespace Dzaba.HomeAccounting.IntegrationTests
     public class FamilyDalTests : IntegrationTestFixutre<IFamilyDal>
     {
         [Test]
-        public void AddFamily_WhenFamilyAdded_ThenItCanBeSelected()
+        public async Task AddFamily_WhenFamilyAdded_ThenItCanBeSelected()
         {
             var name = "Smith";
 
             var sut = CreateSut();
 
-            var id = sut.AddFamilyAsync(name, new[] { "Mark", "Alice" }).Result;
+            var id = await sut.AddFamilyAsync(name, new[] { "Mark", "Alice" });
             sut.GetNameAsync(id).Result.Should().Be(name);
 
             var members = sut.GetMemberNamesAsync(id).Result;
