@@ -5,7 +5,7 @@ namespace Dzaba.HomeAccounting.Contracts
 {
     public class MonthReport
     {
-        public DateTime Date { get; set; }
+        public YearAndMonth Date { get; set; }
 
         public decimal Income { get; set; }
 

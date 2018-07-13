@@ -11,34 +11,34 @@ namespace Dzaba.HomeAccounting.Engine
 {
     public interface IIncomeEngine
     {
-        Task<FamilyReport> CalculateAsync(int familyId, DateTime start, DateTime end);
+        Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end);
     }
 
     internal sealed class IncomeEngine : IIncomeEngine
     {
         private readonly MonthAndYearComparer comparer = new MonthAndYearComparer();
-        private readonly IMonthDal monthDal;
+        private readonly IMonthDataDal monthDataDal;
         private readonly IFamilyDal familyDal;
         private readonly IScheduledOperationDal scheduledOperationDal;
         private readonly IOperationDal operationDal;
 
-        public IncomeEngine(IMonthDal monthDal,
+        public IncomeEngine(IMonthDataDal monthDataDal,
             IFamilyDal familyDal,
             IScheduledOperationDal scheduledOperationDal,
             IOperationDal operationDal)
         {
-            Require.NotNull(monthDal, nameof(monthDal));
+            Require.NotNull(monthDataDal, nameof(monthDataDal));
             Require.NotNull(familyDal, nameof(familyDal));
             Require.NotNull(scheduledOperationDal, nameof(scheduledOperationDal));
             Require.NotNull(operationDal, nameof(operationDal));
 
-            this.monthDal = monthDal;
+            this.monthDataDal = monthDataDal;
             this.familyDal = familyDal;
             this.scheduledOperationDal = scheduledOperationDal;
             this.operationDal = operationDal;
         }
 
-        public async Task<FamilyReport> CalculateAsync(int familyId, DateTime start, DateTime end)
+        public async Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end)
         {
             var reportTask = CalculateReportsAsync(familyId, start, end);
             var familyTask = familyDal.GetNameAsync(familyId);
@@ -51,7 +51,7 @@ namespace Dzaba.HomeAccounting.Engine
             };
         }
 
-        private async Task<MonthReport[]> CalculateReportsAsync(int familyId, DateTime start, DateTime end)
+        private async Task<MonthReport[]> CalculateReportsAsync(int familyId, YearAndMonth start, YearAndMonth end)
         {
             var familyMonths = await GetMonthsAsync(familyId, start, end);
             var scheduledOperations = await scheduledOperationDal.GetAllAsync(familyId);
@@ -61,7 +61,6 @@ namespace Dzaba.HomeAccounting.Engine
             var result = new List<MonthReport>();
             foreach (var month in EnumerateMonths(start, end))
             {
-                //decimal income = 0;
                 var monthReport = new MonthReport
                 {
                     Date = month,
@@ -74,28 +73,27 @@ namespace Dzaba.HomeAccounting.Engine
                         .ToList()
                 };
 
-                if (familyMonths.TryGetValue(month, out Month familyMonth))
+                decimal income = 0;
+                var predict = !familyMonths.TryGetValue(month, out MonthData monthData);
+
+                if (!predict && monthData.IncomeOverride.HasValue)
                 {
-                    decimal income = 0;
-
-                    if (familyMonth.IncomeOverride.HasValue)
-                    {
-                        income = familyMonth.IncomeOverride.Value;
-                    }
-                    else
-                    {
-                        income = CheckScheduledOperations(scheduledOperations, month, monthReport);
-                        income = await CheckOperationOverridesAsync(familyMonth, income, scheduledOperations, monthReport);
-                        income += await CheckOperationsAsync(familyMonth, monthReport);
-                    }
-
-                    sum = CheckTotalOverride(sum, income, familyMonth);
-                    monthReport.Income = income;
+                    income = monthData.IncomeOverride.Value;
                 }
                 else
                 {
-                    var income = CheckScheduledOperations(scheduledOperations, month, monthReport);
+                    income = CheckScheduledOperations(scheduledOperations, month, monthReport);
+                    income = await CheckOperationOverridesAsync(familyId, month, income, scheduledOperations, monthReport);
+                    income += await CheckOperationsAsync(familyId, month, monthReport);
                     monthReport.Income = income;
+                }
+
+                if (!predict)
+                {
+                    sum = CheckTotalOverride(sum, income, monthData);
+                }
+                else
+                {
                     sum += income;
                 }
 
@@ -106,9 +104,9 @@ namespace Dzaba.HomeAccounting.Engine
             return result.ToArray();
         }
 
-        private async Task<decimal> CheckOperationsAsync(Month month, MonthReport report)
+        private async Task<decimal> CheckOperationsAsync(int familyId, YearAndMonth month, MonthReport report)
         {
-            var operations = await operationDal.GetOperationsAsync(month.Id);
+            var operations = await operationDal.GetOperationsAsync(familyId, month);
             return CheckOperations(operations, report);
         }
 
@@ -138,10 +136,10 @@ namespace Dzaba.HomeAccounting.Engine
             return income;
         }
 
-        private async Task<decimal> CheckOperationOverridesAsync(Month month, decimal income, ScheduledOperation[] scheduledOperations, MonthReport report)
+        private async Task<decimal> CheckOperationOverridesAsync(int familyId, YearAndMonth month, decimal income, ScheduledOperation[] scheduledOperations, MonthReport report)
         {
             var currentIncome = income;
-            var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(month.Id);
+            var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(familyId, month);
             foreach (var overrideEntry in overrides)
             {
                 if (overrideEntry.MemberId.HasValue)
@@ -182,9 +180,9 @@ namespace Dzaba.HomeAccounting.Engine
             }
         }
 
-        private decimal CheckScheduledOperations(ScheduledOperation[] scheduledOperations, DateTime month, MonthReport report)
+        private decimal CheckScheduledOperations(ScheduledOperation[] scheduledOperations, YearAndMonth month, MonthReport report)
         {
-            var monthlyScheduledOperations = scheduledOperations.Where(o => IsActive(o, month));
+            var monthlyScheduledOperations = scheduledOperations.Where(o => IsActive(o, month.ToDateTime()));
             return CheckOperations(monthlyScheduledOperations, report);
         }
 
@@ -205,7 +203,7 @@ namespace Dzaba.HomeAccounting.Engine
             return isActive;
         }
 
-        private static decimal CheckTotalOverride(decimal currentSum, decimal income, Month month)
+        private static decimal CheckTotalOverride(decimal currentSum, decimal income, MonthData month)
         {
             var sum = currentSum;
 
@@ -221,18 +219,18 @@ namespace Dzaba.HomeAccounting.Engine
             return sum;
         }
 
-        private async Task<IReadOnlyDictionary<DateTime, Month>> GetMonthsAsync(int familyId, DateTime start, DateTime end)
+        private async Task<IReadOnlyDictionary<YearAndMonth, MonthData>> GetMonthsAsync(int familyId, YearAndMonth start, YearAndMonth end)
         {
-            var months = await monthDal.GetMonthsAsync(familyId, start, end);
-            return months.ToDictionary(m => m.Date.Date, comparer);
+            var months = await monthDataDal.GetMonthsAsync(familyId, start, end);
+            return months.ToDictionary(m => m.YearAndMonth);
         }
 
-        private IEnumerable<DateTime> EnumerateMonths(DateTime start, DateTime end)
+        private IEnumerable<YearAndMonth> EnumerateMonths(YearAndMonth start, YearAndMonth end)
         {
             var current = start;
             while (end >= current)
             {
-                yield return current.Date;
+                yield return current;
                 current = current.AddMonths(1);
             }
         }

@@ -9,6 +9,6 @@ namespace Dzaba.HomeAccounting.Contracts
         public decimal Amount { get; set; }
         public bool IsScheduled { get; set; }
         public bool IsOverriden { get; set; }
-        public DateTime? DateTime { get; set; }
+        public DateTime Date{ get; set; }
     }
 }

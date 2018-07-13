@@ -1,13 +1,9 @@
-﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
-using Dzaba.HomeAccounting.DataBase.Contracts.Model;
+﻿using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.Engine;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
@@ -22,8 +18,10 @@ namespace Dzaba.HomeAccounting.IntegrationTests
             var familyId = await invoker.AddSmithFamilyAsync();
             await invoker.AddScheduledOperationAsync(familyId, "Family income", 10);
 
+            var today = new YearAndMonth(DateTime.Today);
+
             var sut = CreateSut();
-            var result = await sut.CalculateAsync(familyId, DateTime.Today, DateTime.Today.AddMonths(2));
+            var result = await sut.CalculateAsync(familyId, today, today.AddMonths(2));
             result.FamilyId.Should().Be(familyId);
             result.FamilyName.Should().Be("Smith");
             result.Reports.Length.Should().Be(3);

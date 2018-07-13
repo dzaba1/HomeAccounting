@@ -34,7 +34,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 
         public DbSet<FamilyMember> FamilyMembers { get; set; }
 
-        public DbSet<Month> Months { get; set; }
+        public DbSet<MonthData> Months { get; set; }
 
         public DbSet<Operation> Operations { get; set; }
 

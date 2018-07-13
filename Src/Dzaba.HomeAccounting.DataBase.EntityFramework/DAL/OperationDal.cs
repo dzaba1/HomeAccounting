@@ -1,4 +1,5 @@
-﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
+﻿using Dzaba.HomeAccounting.Contracts;
+using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -30,12 +31,13 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             } 
         }
 
-        public async Task<Operation[]> GetOperationsAsync(int monthId)
+        public async Task<Operation[]> GetOperationsAsync(int familyId, YearAndMonth month)
         {
             using (var dbContext = dbContextFactory.Create())
             {
                 return await dbContext.Operations
-                    .Where(o => o.MonthId == monthId)
+                    .Where(o => o.FamilyId == familyId)
+                    .Where(o => o.Date.Year == month.Year && o.Date.Month == month.Month)
                     .ToArrayAsync();
             }
         }

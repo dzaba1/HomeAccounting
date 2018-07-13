@@ -16,9 +16,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual Family Family { get; set; }
 
-        public int MonthId { get; set; }
-
-        public virtual Month Month { get; set; }
+        public DateTime Date { get; set; }
 
         public decimal Amount { get; set; }
 
@@ -29,8 +27,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual FamilyMember Member { get; set; }
 
-        public DateTime? DateTime { get; set; }
-
         public OperationReport ToOperationReport()
         {
             return new OperationReport
@@ -39,7 +35,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
                 Id = Id,
                 Name = Name,
                 IsScheduled = false,
-                DateTime = DateTime,
+                Date = Date,
                 IsOverriden = false
             };
         }

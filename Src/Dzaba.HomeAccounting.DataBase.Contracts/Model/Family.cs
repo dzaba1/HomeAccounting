@@ -17,7 +17,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual ICollection<FamilyMember> Members { get; set; }
 
-        public virtual ICollection<Month> Months { get; set; }
+        public virtual ICollection<MonthData> Months { get; set; }
 
         public virtual ICollection<Operation> Operations { get; set; }
 

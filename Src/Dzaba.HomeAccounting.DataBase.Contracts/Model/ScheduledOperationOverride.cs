@@ -1,14 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 {
     [Table("ScheduledOperationOverrides")]
     public class ScheduledOperationOverride
     {
-        public int MonthId { get; set; }
+        public ushort Year { get; set; }
 
-        public virtual Month Month { get; set; }
+        public byte Month { get; set; }
+
+        public virtual MonthData MonthData { get; set; }
 
         public int OperationId { get; set; }
 

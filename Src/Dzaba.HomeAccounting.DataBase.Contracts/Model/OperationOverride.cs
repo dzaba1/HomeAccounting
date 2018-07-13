@@ -1,8 +1,10 @@
-﻿namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
+﻿using Dzaba.HomeAccounting.Contracts;
+
+namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 {
     public class OperationOverride
     {
-        public int MonthId { get; set; }
+        public YearAndMonth Month { get; set; }
         public int OperationId { get; set; }
         public decimal Amount { get; set; }
         public int? MemberId { get; set; }

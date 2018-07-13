@@ -54,16 +54,15 @@ namespace Dzaba.HomeAccounting.IntegrationTests
             });
         }
 
-        public async Task<int> AddOperation(int familyId, string name, decimal amount, int monthId,
-            int? memberId, DateTime? dateTime)
+        public async Task<int> AddOperation(int familyId, string name, decimal amount, DateTime date,
+            int? memberId)
         {
             return await operationDal.AddOperationAsync(new Operation
             {
                 Amount = amount,
-                DateTime = dateTime,
+                Date = date,
                 FamilyId = familyId,
                 MemberId = memberId,
-                MonthId = monthId,
                 Name = name
             });
         }

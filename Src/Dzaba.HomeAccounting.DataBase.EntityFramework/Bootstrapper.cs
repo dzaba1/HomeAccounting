@@ -14,7 +14,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
         {
             container.AddTransient<IEntityConfiguration, FamilyConfiguration>();
             container.AddTransient<IEntityConfiguration, FamilyMemberConfiguration>();
-            container.AddTransient<IEntityConfiguration, MonthConfiguration>();
+            container.AddTransient<IEntityConfiguration, MonthDataConfiguration>();
             container.AddTransient<IEntityConfiguration, OperationConfiguration>();
             container.AddTransient<IEntityConfiguration, ScheduledOperationConfiguration>();
             container.AddTransient<IEntityConfiguration, ScheduledOperationOverrideConfiguration>();
@@ -22,7 +22,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
             container.AddTransient<IDatabaseContextFactory, DatabaseContextFactory>();
             container.AddTransient<IDbInitializer, DbInitalizer>();
             container.AddTransient<IFamilyDal, FamilyDal>();
-            container.AddTransient<IMonthDal, MonthDal>();
+            container.AddTransient<IMonthDataDal, MonthDataDal>();
             container.AddTransient<IOperationDal, OperationDal>();
             container.AddTransient<IScheduledOperationDal, ScheduledOperationDal>();
 

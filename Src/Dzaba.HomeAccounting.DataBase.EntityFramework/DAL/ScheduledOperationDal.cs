@@ -1,4 +1,5 @@
-﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
+﻿using Dzaba.HomeAccounting.Contracts;
+using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -40,38 +41,39 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             }
         }
 
-        public async Task<OperationOverride[]> GetOverridesForMonthAsync(int monthId)
+        public async Task<OperationOverride[]> GetOverridesForMonthAsync(int familyId, YearAndMonth month)
         {
             using (var dbContext = dbContextFactory.Create())
             {
                 var query = from ov in dbContext.ScheduledOperationOverrides
                             join o in dbContext.ScheduledOperations on ov.OperationId equals o.Id
-                            where ov.MonthId == monthId
-                            select new { ov.MonthId, ov.OperationId, ov.Amount, o.MemberId, OriginalAmount = o.Amount };
+                            where o.FamilyId == familyId && ov.Year == month.Year && ov.Month == month.Month
+                            select new { ov.Year, ov.Month, ov.OperationId, ov.Amount, o.MemberId, OriginalAmount = o.Amount };
 
                 var data = await query.ToArrayAsync();
                 return data.Select(o => new OperationOverride
                 {
                     Amount = o.Amount,
                     MemberId = o.MemberId,
-                    MonthId = o.MonthId,
+                    Month = new YearAndMonth(o.Year, o.Month),
                     OperationId = o.OperationId,
                     OriginalAmount = o.OriginalAmount
                 }).ToArray();
             }
         }
 
-        public async Task OverrideAsync(int monthId, int operationId, decimal amount)
+        public async Task OverrideAsync(YearAndMonth month, int operationId, decimal amount)
         {
             using (var dbContext = dbContextFactory.Create())
             {
-                var existing = await dbContext.ScheduledOperationOverrides.FirstOrDefaultAsync(o => o.MonthId == monthId && o.OperationId == operationId);
+                var existing = await dbContext.ScheduledOperationOverrides.FirstOrDefaultAsync(o => o.Year == month.Year && o.Month == month.Month && o.OperationId == operationId);
                 if (existing == null)
                 {
                     existing = new ScheduledOperationOverride
                     {
                         Amount = amount,
-                        MonthId = monthId,
+                        Year = month.Year,
+                        Month = month.Month,
                         OperationId = operationId
                     };
                     dbContext.ScheduledOperationOverrides.Add(existing);
