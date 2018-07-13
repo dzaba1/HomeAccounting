@@ -46,6 +46,19 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             }
         }
 
+        public async Task<int?> FindFamilyId(string name)
+        {
+            Require.NotWhiteSpace(name, nameof(name));
+
+            using (var dbContext = dbContextFactory.Create())
+            {
+                return await dbContext.Families
+                    .Where(f => f.Name == name)
+                    .Select(f => f.Id)
+                    .FirstOrDefaultAsync();
+            }
+        }
+
         public async Task<Family> GetFamilyAsync(int familyId)
         {
             using (var dbContext = dbContextFactory.Create())
