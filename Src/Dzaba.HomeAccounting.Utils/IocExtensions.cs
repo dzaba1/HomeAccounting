@@ -11,5 +11,13 @@ namespace Dzaba.HomeAccounting.Utils
 
             container.Bind<TInt>().To<TImpl>().InTransientScope();
         }
+
+        public static void RegisterSingleton<TInt, TImpl>(this IKernel container)
+            where TImpl : TInt
+        {
+            Require.NotNull(container, nameof(container));
+
+            container.Bind<TInt>().To<TImpl>().InSingletonScope();
+        }
     }
 }

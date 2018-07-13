@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.Integr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.CmdTest", "Src\Dzaba.HomeAccounting.CmdTest\Dzaba.HomeAccounting.CmdTest.csproj", "{D9264D59-E217-40B0-914C-BA8D8F3A9232}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{DC0CF087-42BE-48E6-AA4B-159796EECC6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.Windows", "Src\Dzaba.HomeAccounting.Windows\Dzaba.HomeAccounting.Windows.csproj", "{3EAEDE0A-97B5-4E10-9458-DBACE338F2E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,9 +61,17 @@ Global
 		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EAEDE0A-97B5-4E10-9458-DBACE338F2E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EAEDE0A-97B5-4E10-9458-DBACE338F2E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EAEDE0A-97B5-4E10-9458-DBACE338F2E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EAEDE0A-97B5-4E10-9458-DBACE338F2E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D9264D59-E217-40B0-914C-BA8D8F3A9232} = {DC0CF087-42BE-48E6-AA4B-159796EECC6F}
+		{3EAEDE0A-97B5-4E10-9458-DBACE338F2E2} = {DC0CF087-42BE-48E6-AA4B-159796EECC6F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C6D3196F-EA1D-42C1-A91C-F7D83B2BA20D}
