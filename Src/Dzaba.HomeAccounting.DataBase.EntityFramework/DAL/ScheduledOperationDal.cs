@@ -3,6 +3,7 @@ using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Utils;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,9 +11,9 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 {
     internal sealed class ScheduledOperationDal : IScheduledOperationDal
     {
-        private readonly IDatabaseContextFactory dbContextFactory;
+        private readonly Func<DatabaseContext> dbContextFactory;
 
-        public ScheduledOperationDal(IDatabaseContextFactory dbContextFactory)
+        public ScheduledOperationDal(Func<DatabaseContext> dbContextFactory)
         {
             Require.NotNull(dbContextFactory, nameof(dbContextFactory));
 
@@ -23,7 +24,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
         {
             Require.NotNull(operation, nameof(operation));
 
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 dbContext.ScheduledOperations.Add(operation);
                 await dbContext.SaveChangesAsync();
@@ -33,7 +34,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<ScheduledOperation[]> GetAllAsync(int familyId)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.ScheduledOperations
                     .Where(o => o.FamilyId == familyId)
@@ -43,7 +44,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<OperationOverride[]> GetOverridesForMonthAsync(int familyId, YearAndMonth month)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 var query = from ov in dbContext.ScheduledOperationOverrides
                             join o in dbContext.ScheduledOperations on ov.OperationId equals o.Id
@@ -64,7 +65,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task OverrideAsync(YearAndMonth month, int operationId, decimal amount)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 var existing = await dbContext.ScheduledOperationOverrides.FirstOrDefaultAsync(o => o.Year == month.Year && o.Month == month.Month && o.OperationId == operationId);
                 if (existing == null)

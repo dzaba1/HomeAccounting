@@ -3,6 +3,7 @@ using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Utils;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,9 +11,9 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 {
     internal sealed class OperationDal : IOperationDal
     {
-        private readonly IDatabaseContextFactory dbContextFactory;
+        private readonly Func<DatabaseContext> dbContextFactory;
 
-        public OperationDal(IDatabaseContextFactory dbContextFactory)
+        public OperationDal(Func<DatabaseContext> dbContextFactory)
         {
             Require.NotNull(dbContextFactory, nameof(dbContextFactory));
 
@@ -23,7 +24,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
         {
             Require.NotNull(operation, nameof(operation));
 
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 dbContext.Operations.Add(operation);
                 await dbContext.SaveChangesAsync();
@@ -33,7 +34,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<Operation[]> GetOperationsAsync(int familyId, YearAndMonth month)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.Operations
                     .Where(o => o.FamilyId == familyId)

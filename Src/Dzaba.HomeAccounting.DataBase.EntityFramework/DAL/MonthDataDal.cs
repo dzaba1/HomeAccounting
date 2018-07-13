@@ -12,9 +12,9 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 {
     internal sealed class MonthDataDal : IMonthDataDal
     {
-        private readonly IDatabaseContextFactory dbContextFactory;
+        private readonly Func<DatabaseContext> dbContextFactory;
 
-        public MonthDataDal(IDatabaseContextFactory dbContextFactory)
+        public MonthDataDal(Func<DatabaseContext> dbContextFactory)
         {
             Require.NotNull(dbContextFactory, nameof(dbContextFactory));
 
@@ -23,7 +23,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<MonthData> GetMonthDataAsync(int familyId, YearAndMonth month)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.Months
                     .FirstOrDefaultAsync(m => m.FamilyId == familyId && m.Year == month.Year && m.Month == month.Month);
@@ -32,7 +32,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<MonthData[]> GetMonthsAsync(int familyId, YearAndMonth start, YearAndMonth end)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.Months
                     .Where(m => m.FamilyId == familyId)

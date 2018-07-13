@@ -2,28 +2,28 @@
 using Dzaba.HomeAccounting.DataBase.EntityFramework;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite;
 using Dzaba.HomeAccounting.Engine;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+using Dzaba.HomeAccounting.Utils;
+using Ninject;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
     public static class Bootstrapper
     {
-        public static IServiceProvider CreateContainer()
+        public static IKernel CreateContainer()
         {
-            var container = new ServiceCollection();
+            var container = new StandardKernel();
             container.RegisterEntityFramework();
             container.RegisterSqlite();
             container.RegisterEngine();
             container.RegisterIntegrationTests();
 
-            return container.BuildServiceProvider();
+            return container;
         }
 
-        public static void RegisterIntegrationTests(this IServiceCollection container)
+        public static void RegisterIntegrationTests(this IKernel container)
         {
-            container.AddTransient<IConnectionStringProvider, ConnectionStringProvider>();
-            container.AddTransient<IInvokerDal, InvokerDal>();
+            container.RegisterTransient<IConnectionStringProvider, ConnectionStringProvider>();
+            container.RegisterTransient<IInvokerDal, InvokerDal>();
         }
     }
 }

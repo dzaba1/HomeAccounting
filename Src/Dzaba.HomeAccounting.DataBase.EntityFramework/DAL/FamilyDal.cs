@@ -2,6 +2,7 @@
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Utils;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 {
     internal sealed class FamilyDal : IFamilyDal
     {
-        private readonly IDatabaseContextFactory dbContextFactory;
+        private readonly Func<DatabaseContext> dbContextFactory;
 
-        public FamilyDal(IDatabaseContextFactory dbContextFactory)
+        public FamilyDal(Func<DatabaseContext> dbContextFactory)
         {
             Require.NotNull(dbContextFactory, nameof(dbContextFactory));
 
@@ -24,7 +25,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             Require.NotWhiteSpace(name, nameof(name));
             Require.NotNull(members, nameof(members));
 
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 var family = new Family
                 {
@@ -50,7 +51,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
         {
             Require.NotWhiteSpace(name, nameof(name));
 
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.Families
                     .Where(f => f.Name == name)
@@ -59,9 +60,22 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             }
         }
 
+        public async Task<int?> FindMemberId(int familyId, string name)
+        {
+            Require.NotWhiteSpace(name, nameof(name));
+
+            using (var dbContext = dbContextFactory())
+            {
+                return await dbContext.FamilyMembers
+                    .Where(m => m.FamilyId == familyId && m.Name == name)
+                    .Select(m => m.Id)
+                    .FirstOrDefaultAsync();
+            }
+        }
+
         public async Task<Family> GetFamilyAsync(int familyId)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.Families.FirstOrDefaultAsync(f => f.Id == familyId);
             }
@@ -69,7 +83,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<IReadOnlyDictionary<int, string>> GetMemberNamesAsync(int familyId)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.FamilyMembers
                     .Where(m => m.FamilyId == familyId)
@@ -79,7 +93,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
 
         public async Task<string> GetNameAsync(int familyId)
         {
-            using (var dbContext = dbContextFactory.Create())
+            using (var dbContext = dbContextFactory())
             {
                 return await dbContext.Families
                     .Where(f => f.Id == familyId)

@@ -2,31 +2,59 @@
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Configuration;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.DAL;
+using Dzaba.HomeAccounting.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Ninject;
 using System;
 
 namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 {
     public static class Bootstrapper
     {
-        public static void RegisterEntityFramework(this IServiceCollection container)
+        public static void RegisterEntityFramework(this IKernel container)
         {
-            container.AddTransient<IEntityConfiguration, FamilyConfiguration>();
-            container.AddTransient<IEntityConfiguration, FamilyMemberConfiguration>();
-            container.AddTransient<IEntityConfiguration, MonthDataConfiguration>();
-            container.AddTransient<IEntityConfiguration, OperationConfiguration>();
-            container.AddTransient<IEntityConfiguration, ScheduledOperationConfiguration>();
-            container.AddTransient<IEntityConfiguration, ScheduledOperationOverrideConfiguration>();
+            Require.NotNull(container, nameof(container));
 
-            container.AddTransient<IDatabaseContextFactory, DatabaseContextFactory>();
-            container.AddTransient<IDbInitializer, DbInitalizer>();
-            container.AddTransient<IFamilyDal, FamilyDal>();
-            container.AddTransient<IMonthDataDal, MonthDataDal>();
-            container.AddTransient<IOperationDal, OperationDal>();
-            container.AddTransient<IScheduledOperationDal, ScheduledOperationDal>();
+            container.RegisterTransient<IEntityConfiguration, FamilyConfiguration>();
+            container.RegisterTransient<IEntityConfiguration, FamilyMemberConfiguration>();
+            container.RegisterTransient<IEntityConfiguration, MonthDataConfiguration>();
+            container.RegisterTransient<IEntityConfiguration, OperationConfiguration>();
+            container.RegisterTransient<IEntityConfiguration, ScheduledOperationConfiguration>();
+            container.RegisterTransient<IEntityConfiguration, ScheduledOperationOverrideConfiguration>();
 
-            container.AddDbContext<DatabaseContext>(OptionsHandler, ServiceLifetime.Transient, ServiceLifetime.Transient);
+            container.RegisterTransient<IDbInitializer, DbInitalizer>();
+            container.RegisterTransient<IFamilyDal, FamilyDal>();
+            container.RegisterTransient<IMonthDataDal, MonthDataDal>();
+            container.RegisterTransient<IOperationDal, OperationDal>();
+            container.RegisterTransient<IScheduledOperationDal, ScheduledOperationDal>();
+
+            RegisterDbContext(container);
+        }
+
+        private static void RegisterDbContext(IKernel container)
+        {
+            container.Bind<DbContextOptions>()
+                .ToMethod(c =>
+                {
+                    DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
+                    OptionsHandler(c.Kernel, optionsBuilder);
+                    return optionsBuilder.Options;
+                })
+                .InSingletonScope();
+
+            container.Bind<DatabaseContext>()
+                .ToSelf()
+                .InTransientScope();
+
+            container.Bind<Func<DatabaseContext>>()
+                .ToMethod(c => () =>
+                {
+                    var dbContext = c.Kernel.Get<DatabaseContext>();
+                    dbContext.Database.EnsureCreated();
+                    return dbContext;
+                })
+                .InTransientScope();
         }
 
         private static void OptionsHandler(IServiceProvider container, DbContextOptionsBuilder optionsBuilder)
