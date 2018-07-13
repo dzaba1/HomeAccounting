@@ -14,6 +14,8 @@ namespace Dzaba.HomeAccounting.IntegrationTests
         Task<int> AddSmithFamilyAsync();
         Task<int> AddScheduledOperationAsync(int familyId, string name, decimal amount,
             int? memberId = null, DateTime? starts = null, DateTime? ends = null);
+        Task<int> AddOperation(int familyId, string name, decimal amount, DateTime date,
+            int? memberId = null);
     }
 
     internal sealed class InvokerDal : IInvokerDal
@@ -55,7 +57,7 @@ namespace Dzaba.HomeAccounting.IntegrationTests
         }
 
         public async Task<int> AddOperation(int familyId, string name, decimal amount, DateTime date,
-            int? memberId)
+            int? memberId = null)
         {
             return await operationDal.AddOperationAsync(new Operation
             {
