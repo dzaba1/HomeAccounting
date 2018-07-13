@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.Contra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.DataBase.EntityFramework", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework\Dzaba.HomeAccounting.DataBase.EntityFramework.csproj", "{933795E8-CE3C-4792-99F2-73FF558F3B95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite.csproj", "{29C250B4-C82B-412B-B71C-16712DDF888C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite", "Src\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite.csproj", "{29C250B4-C82B-412B-B71C-16712DDF888C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.IntegrationTests", "Tests\Dzaba.HomeAccounting.IntegrationTests\Dzaba.HomeAccounting.IntegrationTests.csproj", "{D997454F-A34D-4CDF-9F04-3E52051B19C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dzaba.HomeAccounting.CmdTest", "Src\Dzaba.HomeAccounting.CmdTest\Dzaba.HomeAccounting.CmdTest.csproj", "{D9264D59-E217-40B0-914C-BA8D8F3A9232}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{D997454F-A34D-4CDF-9F04-3E52051B19C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D997454F-A34D-4CDF-9F04-3E52051B19C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D997454F-A34D-4CDF-9F04-3E52051B19C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9264D59-E217-40B0-914C-BA8D8F3A9232}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
