@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Dzaba.HomeAccounting.Contracts
 {
+    [DebuggerDisplay("{Date} - {Sum}")]
     public class MonthReport
     {
         public YearAndMonth Date { get; set; }

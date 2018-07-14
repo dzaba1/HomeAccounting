@@ -115,5 +115,10 @@ namespace Dzaba.HomeAccounting.Contracts
 
             return new YearAndMonth(year, (byte)month);
         }
+
+        public override string ToString()
+        {
+            return $"{Year}/{Month}";
+        }
     }
 }
