@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Dzaba.HomeAccounting.Windows.ViewModel
 {
-    internal sealed class MainViewModel : BaseViewModel
+    internal sealed class SelectFamilyViewModel : BaseViewModel
     {
-        
+
     }
 }

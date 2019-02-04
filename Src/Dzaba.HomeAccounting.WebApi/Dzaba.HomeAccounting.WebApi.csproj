@@ -1,33 +1,39 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\Api</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\bin\Release\</OutputPath>
+    <OutputPath>..\..\bin\Release\Api</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
     <PackageReference Include="Ninject" Version="3.3.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj" />
-    <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.Contracts\Dzaba.HomeAccounting.DataBase.Contracts.csproj" />
-    <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.EntityFramework\Dzaba.HomeAccounting.DataBase.EntityFramework.csproj" />
-    <ProjectReference Include="..\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Dzaba.Utils">
-      <HintPath>..\..\3rdParty\Dzaba.Utils.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Dzaba.HomeAccounting.Contracts\Dzaba.HomeAccounting.Contracts.csproj" />
+    <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.Contracts\Dzaba.HomeAccounting.DataBase.Contracts.csproj" />
+    <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite\Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite.csproj" />
+    <ProjectReference Include="..\Dzaba.HomeAccounting.DataBase.EntityFramework\Dzaba.HomeAccounting.DataBase.EntityFramework.csproj" />
+    <ProjectReference Include="..\Dzaba.HomeAccounting.Engine\Dzaba.HomeAccounting.Engine.csproj" />
+    <ProjectReference Include="..\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj" />
   </ItemGroup>
 
 </Project>

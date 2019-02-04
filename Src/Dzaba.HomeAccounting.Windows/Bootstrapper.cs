@@ -3,7 +3,10 @@ using Dzaba.HomeAccounting.DataBase.EntityFramework;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite;
 using Dzaba.HomeAccounting.Engine;
 using Dzaba.HomeAccounting.Utils;
+using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.HomeAccounting.Windows.ViewModel;
+using Dzaba.Mvvm;
+using Dzaba.Mvvm.Windows;
 using Ninject;
 using System.ComponentModel;
 using System.Windows;
@@ -15,6 +18,8 @@ namespace Dzaba.HomeAccounting.Windows
         public static IKernel CreateContainer()
         {
             var container = new StandardKernel();
+            container.RegisterMvvm();
+            container.RegisterMvvmWindows();
             container.RegisterEntityFramework();
             container.RegisterSqlite();
             container.RegisterEngine();
@@ -28,26 +33,7 @@ namespace Dzaba.HomeAccounting.Windows
             container.RegisterTransient<IConnectionStringProvider, ConnectionStringProvider>();
 
             container.RegisterView<MainWindow, MainViewModel>(true);
-        }
-
-        private static void RegisterView<TView, TViewModel>(this IKernel container, bool isSingleton)
-            where TView : FrameworkElement
-            where TViewModel : INotifyPropertyChanged
-        {
-            if (isSingleton)
-            {
-                container.Bind<TView>()
-                    .ToSelf()
-                    .InSingletonScope()
-                    .WithPropertyValue("DataContext", c => c.Kernel.Get<TViewModel>());
-            }
-            else
-            {
-                container.Bind<TView>()
-                    .ToSelf()
-                    .InTransientScope()
-                    .WithPropertyValue("DataContext", c => c.Kernel.Get<TViewModel>());
-            }
+            container.RegisterView<SelectFamilyView, SelectFamilyViewModel>();
         }
     }
 }

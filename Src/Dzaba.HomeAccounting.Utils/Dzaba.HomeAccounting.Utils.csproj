@@ -17,4 +17,10 @@
     <PackageReference Include="Ninject" Version="3.3.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Dzaba.Utils">
+      <HintPath>..\..\3rdParty\Dzaba.Utils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

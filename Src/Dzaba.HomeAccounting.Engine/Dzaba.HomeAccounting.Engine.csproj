@@ -22,4 +22,10 @@
     <ProjectReference Include="..\Dzaba.HomeAccounting.Utils\Dzaba.HomeAccounting.Utils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Dzaba.Utils">
+      <HintPath>..\..\3rdParty\Dzaba.Utils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

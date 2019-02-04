@@ -4,9 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dzaba.HomeAccounting.Windows"
+        xmlns:mvvmNavigation="clr-namespace:Dzaba.Mvvm.Windows.Navigation;assembly=Dzaba.Mvvm.Windows"
+        xmlns:mvvmWindows="clr-namespace:Dzaba.Mvvm.Windows;assembly=Dzaba.Mvvm.Windows"
         mc:Ignorable="d"
         Title="Home Accounting" Height="600" Width="900">
     <Grid>
-        
+        <ContentControl Margin="15" mvvmWindows:ViewModel.Type="{x:Type mvvmNavigation:INavigationService}"
+                        Content="{Binding ActiveView}"/>
     </Grid>
 </Window>
