@@ -8,8 +8,6 @@ using Dzaba.HomeAccounting.Windows.ViewModel;
 using Dzaba.Mvvm;
 using Dzaba.Mvvm.Windows;
 using Ninject;
-using System.ComponentModel;
-using System.Windows;
 
 namespace Dzaba.HomeAccounting.Windows
 {
@@ -18,7 +16,10 @@ namespace Dzaba.HomeAccounting.Windows
         public static IKernel CreateContainer()
         {
             var container = new StandardKernel();
-            container.RegisterMvvm();
+            container.RegisterMvvm(new BootstrapOptions
+            {
+                LongOperationPopupSingleton = false
+            });
             container.RegisterMvvmWindows();
             container.RegisterEntityFramework();
             container.RegisterSqlite();

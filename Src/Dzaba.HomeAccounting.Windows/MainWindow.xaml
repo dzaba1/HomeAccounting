@@ -8,6 +8,5 @@
         Title="Home Accounting" Height="600" Width="900">
     <Grid>
         <mvvmView:NavigationContainer Margin="15" />
-        <mvvmView:LongOperationView />
     </Grid>
 </Window>

@@ -1,8 +1,6 @@
 ﻿using Dzaba.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.Utils;
@@ -17,22 +15,18 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
     {
         private readonly IInteractionService interaction;
         private readonly IFamilyDal familyDal;
-        private readonly ILongOperationPopup longOperationPopup;
         private readonly INavigationService navigation;
 
         public SelectFamilyViewModel(IInteractionService interaction,
             IFamilyDal familyDal,
-            ILongOperationPopup longOperationPopup,
             INavigationService navigation)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(familyDal, nameof(familyDal));
-            Require.NotNull(longOperationPopup, nameof(longOperationPopup));
             Require.NotNull(navigation, nameof(navigation));
 
             this.interaction = interaction;
             this.familyDal = familyDal;
-            this.longOperationPopup = longOperationPopup;
             this.navigation = navigation;
         }
 
@@ -62,35 +56,25 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
         }
 
-        private async Task<int> CreateFamily(string name)
-        {
-            try
-            {
-                longOperationPopup.OpenLongOperationPopup("Dodaję nową rodzinę...");
-
-                return await familyDal.AddFamilyAsync(name);
-            }
-            finally
-            {
-                longOperationPopup.CloseLongOperationPopup();
-            }
-        }
-
         private async void OnNewFamily()
         {
             try
             {
-                var id = await CreateFamily(NewFamilyName);
+                FamiliesListLoading = true;
+                var id = await familyDal.AddFamilyAsync(NewFamilyName);
                 navigation.ShowView<FamilyMainView>(id);
             }
             catch (Exception ex)
             {
                 interaction.ShowError(ex, "Error");
             }
+            finally
+            {
+                FamiliesListLoading = false;
+            }
         }
 
         private DelegateCommand _onLoadedCommand;
-
         public DelegateCommand OnLoadedCommand
         {
             get
@@ -108,7 +92,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         {
             try
             {
-                longOperationPopup.OpenLongOperationPopup("Ładowanie...");
+                FamiliesListLoading = true;
                 var families = await familyDal.GetAllNamesAsync();
                 Families = new ConcurrentObservableCollection<KeyValuePair<int, string>>(families);
             }
@@ -118,7 +102,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
             finally
             {
-                longOperationPopup.CloseLongOperationPopup();
+                FamiliesListLoading = false;
             }
         }
 
@@ -141,11 +125,11 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             {
                 _selectedFamilyId = value;
                 RaisePropertyChanged();
+                ChooseCommand.RaiseCanExecuteChanged();
             }
         }
 
         private DelegateCommand<int> _deleteFamilyCommand;
-
         public DelegateCommand<int> DeleteFamilyCommand
         {
             get
@@ -167,8 +151,8 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 {
                     return;
                 }
-              
-                longOperationPopup.OpenLongOperationPopup("Usuwanie rodziny...");
+
+                FamiliesListLoading = true;
                 await familyDal.DeleteFamilyAsync(id);
 
                 Families.RemoveWhere(f => f.Key == id);
@@ -179,7 +163,44 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
             finally
             {
-                longOperationPopup.CloseLongOperationPopup();
+                FamiliesListLoading = false;
+            }
+        }
+
+        private bool _familiesListLoading;
+        public bool FamiliesListLoading
+        {
+            get { return _familiesListLoading; }
+            set
+            {
+                _familiesListLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private DelegateCommand _chooseCommand;
+        public DelegateCommand ChooseCommand
+        {
+            get
+            {
+                if (_chooseCommand == null)
+                {
+                    _chooseCommand = new DelegateCommand(OnChoose, () => SelectedFamilyId.HasValue);
+                }
+
+                return _chooseCommand;
+            }
+        }
+
+        private void OnChoose()
+        {
+            try
+            {
+                navigation.ShowView<FamilyMainView>(SelectedFamilyId.Value);
+            }
+            catch (Exception ex)
+            {
+                interaction.ShowError(ex, "Error");
             }
         }
     }
