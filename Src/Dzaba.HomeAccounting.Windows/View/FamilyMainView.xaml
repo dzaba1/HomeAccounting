@@ -17,11 +17,19 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Button Content="Wróć" Margin="3" MinWidth="50"
                     Command="{Binding Path=BackCommand}"/>
         </StackPanel>
+        <TextBlock Grid.Row="1" Margin="6"
+                   Text="{Binding Path=FamilyName}"
+                   FontSize="18" />
+        <TabControl Grid.Row="2">
+            
+        </TabControl>
     </Grid>
 </UserControl>
