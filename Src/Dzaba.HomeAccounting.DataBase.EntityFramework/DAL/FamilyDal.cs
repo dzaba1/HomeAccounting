@@ -1,6 +1,5 @@
 ﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
-using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,6 +47,11 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             }
         }
 
+        public Task<int> AddFamilyAsync(string name)
+        {
+            return AddFamilyAsync(name, Enumerable.Empty<string>());
+        }
+
         public async Task<int?> FindFamilyId(string name)
         {
             Require.NotWhiteSpace(name, nameof(name));
@@ -71,6 +75,34 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
                     .Where(m => m.FamilyId == familyId && m.Name == name)
                     .Select(m => m.Id)
                     .FirstOrDefaultAsync();
+            }
+        }
+
+        public async Task<Family[]> GetAllAsync()
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                return await dbContext.Families.ToArrayAsync();
+            }
+        }
+
+        public async Task<IReadOnlyDictionary<int, string>> GetAllNamesAsync()
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                return await dbContext.Families
+                    .Select(x => new {x.Id, x.Name})
+                    .ToDictionaryAsync(x => x.Id, x => x.Name);
+            }
+        }
+
+        public async Task DeleteFamilyAsync(int id)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                var query = dbContext.Families.Where(f => f.Id == id);
+                dbContext.Families.RemoveRange(query);
+                await dbContext.SaveChangesAsync();
             }
         }
 
