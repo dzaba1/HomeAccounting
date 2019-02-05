@@ -34,6 +34,7 @@ namespace Dzaba.HomeAccounting.Windows
 
             container.RegisterView<MainWindow, MainViewModel>(true);
             container.RegisterView<SelectFamilyView, SelectFamilyViewModel>();
+            container.RegisterView<FamilyMainView, FamilyMainViewModel>();
         }
     }
 }

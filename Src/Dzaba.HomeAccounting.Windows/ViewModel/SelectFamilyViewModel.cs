@@ -62,22 +62,30 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
         }
 
-        private async void OnNewFamily()
+        private async Task<int> CreateFamily(string name)
         {
             try
             {
                 longOperationPopup.OpenLongOperationPopup("Dodaję nową rodzinę...");
 
-                var id = await familyDal.AddFamilyAsync(NewFamilyName);
+                return await familyDal.AddFamilyAsync(name);
+            }
+            finally
+            {
+                longOperationPopup.CloseLongOperationPopup();
+            }
+        }
+
+        private async void OnNewFamily()
+        {
+            try
+            {
+                var id = await CreateFamily(NewFamilyName);
                 navigation.ShowView<FamilyMainView>(id);
             }
             catch (Exception ex)
             {
                 interaction.ShowError(ex, "Error");
-            }
-            finally
-            {
-                longOperationPopup.CloseLongOperationPopup();
             }
         }
 
