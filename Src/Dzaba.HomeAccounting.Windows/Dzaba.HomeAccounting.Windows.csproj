@@ -172,9 +172,13 @@
     </ApplicationDefinition>
     <Compile Include="ViewModel\FamilyMainViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MembersViewModel.cs" />
     <Compile Include="ViewModel\SelectFamilyViewModel.cs" />
     <Compile Include="View\FamilyMainView.xaml.cs">
       <DependentUpon>FamilyMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MembersView.xaml.cs">
+      <DependentUpon>MembersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SelectFamilyView.xaml.cs">
       <DependentUpon>SelectFamilyView.xaml</DependentUpon>
@@ -194,6 +198,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\FamilyMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MembersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

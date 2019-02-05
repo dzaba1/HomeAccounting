@@ -16,8 +16,6 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         private readonly INavigationService navigation;
         private readonly IInteractionService interaction;
         private readonly IFamilyDal familyDal;
-        private readonly ILongOperationPopup longOperationPopup;
-        private int familyId;
 
         public FamilyMainViewModel(INavigationService navigation,
             IInteractionService interaction,
@@ -27,17 +25,15 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             Require.NotNull(navigation, nameof(navigation));
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(familyDal, nameof(familyDal));
-            Require.NotNull(longOperationPopup, nameof(longOperationPopup));
 
             this.navigation = navigation;
             this.interaction = interaction;
             this.familyDal = familyDal;
-            this.longOperationPopup = longOperationPopup;
         }
 
         public void OnNavigate(object parameter)
         {
-            familyId = (int) parameter;
+            Id = (int) parameter;
         }
 
         private DelegateCommand _backCommand;
@@ -82,8 +78,8 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         {
             try
             {
-                longOperationPopup.Open("Ładowanie...");
-                FamilyName = await familyDal.GetNameAsync(familyId);
+                LongOperation = true;
+                FamilyName = await familyDal.GetNameAsync(Id);
             }
             catch (Exception ex)
             {
@@ -91,7 +87,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
             finally
             {
-                longOperationPopup.Close();
+                LongOperation = false;
             }
         }
 
@@ -102,6 +98,28 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             private set
             {
                 _familyName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            private set
+            {
+                _id = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _longOperation;
+        public bool LongOperation
+        {
+            get { return _longOperation; }
+            set
+            {
+                _longOperation = value;
                 RaisePropertyChanged();
             }
         }
