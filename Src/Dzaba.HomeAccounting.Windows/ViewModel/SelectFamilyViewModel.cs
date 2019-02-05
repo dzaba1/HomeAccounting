@@ -178,25 +178,25 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
         }
 
-        private DelegateCommand _chooseCommand;
-        public DelegateCommand ChooseCommand
+        private DelegateCommand<int?> _chooseCommand;
+        public DelegateCommand<int?> ChooseCommand
         {
             get
             {
                 if (_chooseCommand == null)
                 {
-                    _chooseCommand = new DelegateCommand(OnChoose, () => SelectedFamilyId.HasValue);
+                    _chooseCommand = new DelegateCommand<int?>(OnChoose, id => id.HasValue);
                 }
 
                 return _chooseCommand;
             }
         }
 
-        private void OnChoose()
+        private void OnChoose(int? id)
         {
             try
             {
-                navigation.ShowView<FamilyMainView>(SelectedFamilyId.Value);
+                navigation.ShowView<FamilyMainView>(id.Value);
             }
             catch (Exception ex)
             {

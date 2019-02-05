@@ -41,6 +41,11 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
+                        <Grid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick"
+                                          Command="{Binding Path=DataContext.ChooseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SelectFamilyView}}}"
+                                          CommandParameter="{Binding Path=Key}" />
+                        </Grid.InputBindings>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -60,7 +65,8 @@
         <Button Grid.Row="2" Margin="3" Grid.ColumnSpan="2"
                     Content="Wybierz" MinWidth="60"
                     HorizontalAlignment="Right"
-                    Command="{Binding Path=ChooseCommand}"/>
+                    Command="{Binding Path=ChooseCommand}"
+                CommandParameter="{Binding Path=SelectedFamilyId}"/>
         <mvvmView:LongOperationView Grid.Row="0" Grid.RowSpan="3"
                                     Grid.Column="0" Grid.ColumnSpan="2"
                 Message="Ładowanie" Show="{Binding Path=FamiliesListLoading}" />
