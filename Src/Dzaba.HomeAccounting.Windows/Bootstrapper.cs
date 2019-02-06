@@ -38,6 +38,7 @@ namespace Dzaba.HomeAccounting.Windows
             container.RegisterView<FamilyMainView, FamilyMainViewModel>();
             container.RegisterView<MembersView, MembersViewModel>();
             container.RegisterView<OperationsView, OperationsViewModel>();
+            container.RegisterView<IncomeView, IncomeViewModel>();
         }
     }
 }

@@ -40,8 +40,9 @@
                 <local:OperationsView mvvmWindows:ViewModel.Type="{x:Type viewModel:OperationsViewModel}"
                                    mvvmWindows:ViewModel.Parameter="{Binding Path=DataContext.Id, Mode=OneWay, ElementName=familyMainView}"/>
             </TabItem>
-            <TabItem Header="Ustawienia">
-
+            <TabItem Header="Przychód">
+                <local:IncomeView mvvmWindows:ViewModel.Type="{x:Type viewModel:IncomeViewModel}"
+                                      mvvmWindows:ViewModel.Parameter="{Binding Path=DataContext.Id, Mode=OneWay, ElementName=familyMainView}"/>
             </TabItem>
         </TabControl>
     </Grid>

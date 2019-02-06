@@ -191,6 +191,7 @@
     <Compile Include="Consts.cs" />
     <Compile Include="Model\MemberNamePair.cs" />
     <Compile Include="ViewModel\FamilyMainViewModel.cs" />
+    <Compile Include="ViewModel\IncomeViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MembersViewModel.cs" />
     <Compile Include="ViewModel\OperationsViewModel.cs" />
@@ -198,6 +199,9 @@
     <Compile Include="ViewModel\SelectFamilyViewModel.cs" />
     <Compile Include="View\FamilyMainView.xaml.cs">
       <DependentUpon>FamilyMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IncomeView.xaml.cs">
+      <DependentUpon>IncomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MembersView.xaml.cs">
       <DependentUpon>MembersView.xaml</DependentUpon>
@@ -227,6 +231,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\FamilyMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\IncomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

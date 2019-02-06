@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Dzaba.HomeAccounting.Windows.View.IncomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mvvmView="clr-namespace:Dzaba.Mvvm.Windows.View;assembly=Dzaba.Mvvm.Windows"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <!--<i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>-->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Style="{StaticResource TextBlockStyle}"
+                       Text="Od:" />
+            <DatePicker FirstDayOfWeek="Monday"
+                        Margin="3" DisplayDateEnd="{Binding Path=To}"
+                        SelectedDate="{Binding Path=From}"/>
+            <TextBlock Style="{StaticResource TextBlockStyle}"
+                       Text="Do:" />
+            <DatePicker FirstDayOfWeek="Monday"
+                        Margin="3" DisplayDateStart="{Binding Path=From}"
+                        SelectedDate="{Binding Path=To}"/>
+            <Button Margin="3" MinWidth="60"
+                    Content="Przelicz"
+                    Command="{Binding Path=CalculateCommand}" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" Margin="3"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  CanUserDeleteRows="False" CanUserReorderColumns="False"
+                  CanUserResizeColumns="True" CanUserResizeRows="False"
+                  CanUserSortColumns="False" IsReadOnly="True"
+                  SelectionMode="Single"
+                  ItemsSource="{Binding Path=Report}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Miesiąc" Binding="{Binding Path=Date}" />
+                <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Income, StringFormat=c}" />
+                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Sum, StringFormat=c}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <mvvmView:LongOperationView Grid.Row="0" Grid.RowSpan="2"
+                                    Message="Ładowanie" Show="{Binding Path=Loading}" />
+    </Grid>
+</UserControl>
