@@ -1,7 +1,6 @@
 ﻿using Dzaba.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.Utils;
 using Dzaba.HomeAccounting.Windows.View;
