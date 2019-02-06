@@ -49,7 +49,7 @@
                         <Button Content="Usuń" Grid.Column="1"
                                 HorizontalAlignment="Right"
                                 Command="{Binding Path=DataContext.DeleteMemberCommand,
-                            RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:SelectFamilyView}}}"
+                            RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MembersView}}}"
                                 CommandParameter="{Binding Path=Key}"/>
                     </Grid>
                 </DataTemplate>

@@ -63,5 +63,16 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
                 return entity.Id;
             }
         }
+
+        public async Task DeleteMemberAsync(int id)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                var query = dbContext.FamilyMembers.Where(m => m.Id == id);
+
+                dbContext.FamilyMembers.RemoveRange(query);
+                await dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

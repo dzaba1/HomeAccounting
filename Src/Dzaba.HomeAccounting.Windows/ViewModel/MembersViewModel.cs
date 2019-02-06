@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
+using Dzaba.HomeAccounting.Utils;
 using Dzaba.Mvvm.Windows;
 using Dzaba.Utils;
 
@@ -140,6 +141,44 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 var id = await familyMembersDal.AddMemeberAsync(Id, New);          
                 Members.Add(new KeyValuePair<int, string>(id, New));
                 New = null;
+            }
+            catch (Exception ex)
+            {
+                interaction.ShowError(ex, "Error");
+            }
+            finally
+            {
+                Loading = false;
+            }
+        }
+
+        private DelegateCommand<int> _deleteMemberCommand;
+
+        public DelegateCommand<int> DeleteMemberCommand
+        {
+            get
+            {
+                if (_deleteMemberCommand == null)
+                {
+                    _deleteMemberCommand = new DelegateCommand<int>(OnDelete);
+                }
+
+                return _deleteMemberCommand;
+            }
+        }
+
+        private async void OnDelete(int id)
+        {
+            try
+            {
+                if (!interaction.YesNoQuestion("Czy na pewno chcesz usunąć członka rodziny?"))
+                {
+                    return;
+                }
+
+                Loading = true;
+                await familyMembersDal.DeleteMemberAsync(id);
+                Members.RemoveWhere(m => m.Key == id);
             }
             catch (Exception ex)
             {
