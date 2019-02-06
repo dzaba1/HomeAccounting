@@ -6,21 +6,27 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mvvmView="clr-namespace:Dzaba.Mvvm.Windows.View;assembly=Dzaba.Mvvm.Windows"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Name="incomeView">
 
-    <!--<i:Interaction.Triggers>
+    <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding Path=LoadedCommand}" />
         </i:EventTrigger>
-    </i:Interaction.Triggers>-->
+    </i:Interaction.Triggers>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
             <TextBlock Style="{StaticResource TextBlockStyle}"
                        Text="Od:" />
             <DatePicker FirstDayOfWeek="Monday"
@@ -36,13 +42,14 @@
                     Command="{Binding Path=CalculateCommand}" />
         </StackPanel>
 
-        <DataGrid Grid.Row="1" Margin="3"
+        <DataGrid Grid.Row="1" Grid.Column="0" Margin="3"
                   AutoGenerateColumns="False" CanUserAddRows="False"
                   CanUserDeleteRows="False" CanUserReorderColumns="False"
                   CanUserResizeColumns="True" CanUserResizeRows="False"
                   CanUserSortColumns="False" IsReadOnly="True"
                   SelectionMode="Single"
-                  ItemsSource="{Binding Path=Report}">
+                  ItemsSource="{Binding Path=Report}"
+                  SelectedItem="{Binding Path=SelectedReport}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Miesiąc" Binding="{Binding Path=Date}" />
                 <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Income, StringFormat=c}" />
@@ -50,7 +57,32 @@
             </DataGrid.Columns>
         </DataGrid>
 
+        <Grid Grid.Row="1" Grid.Column="1"
+              IsEnabled="{Binding Path=DataContext.IsChangeEnabled, ElementName=incomeView}"
+              DataContext="{Binding Path=Editable}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       Style="{StaticResource TextBlockStyle}"
+                       VerticalAlignment="Top"
+                       Text="Notatki:" />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                     AcceptsTab="True" AcceptsReturn="True" TextWrapping="WrapWithOverflow"
+                     VerticalScrollBarVisibility="Auto" />
+            <Button Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="60"
+                    Content="Zapisz" />
+        </Grid>
+
         <mvvmView:LongOperationView Grid.Row="0" Grid.RowSpan="2"
+                                    Grid.Column="0" Grid.ColumnSpan="2"
                                     Message="Ładowanie" Show="{Binding Path=Loading}" />
     </Grid>
 </UserControl>

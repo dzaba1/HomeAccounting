@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dzaba.HomeAccounting.Contracts;
+using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
+using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Engine;
 using Dzaba.Mvvm;
 using Dzaba.Utils;
@@ -14,15 +16,20 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
     {
         private readonly IInteractionService interaction;
         private readonly IIncomeEngine incomeEngine;
+        private readonly IMonthDataDal monthsDal;
+        private IReadOnlyDictionary<YearAndMonth, MonthData> monthsData;
 
         public IncomeViewModel(IInteractionService interaction,
-            IIncomeEngine incomeEngine)
+            IIncomeEngine incomeEngine,
+            IMonthDataDal monthsDal)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(incomeEngine, nameof(incomeEngine));
+            Require.NotNull(monthsDal, nameof(monthsDal));
 
             this.interaction = interaction;
             this.incomeEngine = incomeEngine;
+            this.monthsDal = monthsDal;
         }
 
         private int _id;
@@ -36,34 +43,34 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             }
         }
 
-        //private DelegateCommand _loadedCommand;
-        //public DelegateCommand LoadedCommand
-        //{
-        //    get
-        //    {
-        //        if (_loadedCommand == null)
-        //        {
-        //            _loadedCommand = new DelegateCommand(OnLoaded);
-        //        }
-        //        return _loadedCommand;
-        //    }
-        //}
+        private DelegateCommand _loadedCommand;
+        public DelegateCommand LoadedCommand
+        {
+            get
+            {
+                if (_loadedCommand == null)
+                {
+                    _loadedCommand = new DelegateCommand(OnLoaded);
+                }
+                return _loadedCommand;
+            }
+        }
 
-        //private async void OnLoaded()
-        //{
-        //    try
-        //    {
-        //        Loading = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        interaction.ShowError(ex, "Error");
-        //    }
-        //    finally
-        //    {
-        //        Loading = false;
-        //    }
-        //}
+        private async void OnLoaded()
+        {
+            try
+            {
+                Loading = true;
+            }
+            catch (Exception ex)
+            {
+                interaction.ShowError(ex, "Error");
+            }
+            finally
+            {
+                Loading = false;
+            }
+        }
 
         public void SetParameter(object parameter)
         {
@@ -123,7 +130,12 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             try
             {
                 Loading = true;
-                var report = await incomeEngine.CalculateAsync(Id, new YearAndMonth(From.Value), new YearAndMonth(To.Value));
+                var start = new YearAndMonth(From.Value);
+                var end = new YearAndMonth(To.Value);
+
+                monthsData = (await monthsDal.GetMonthsAsync(Id, start, end))
+                    .ToDictionary(x => x.YearAndMonth);
+                var report = await incomeEngine.CalculateAsync(Id, start, end);
                 Report = report.Reports;
             }
             catch (Exception ex)

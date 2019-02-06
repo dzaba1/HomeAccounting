@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Dzaba.HomeAccounting.Contracts;
 
 namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 {
@@ -8,6 +9,9 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public ushort Year { get; set; }
 
         public byte Month { get; set; }
+
+        [NotMapped]
+        public YearAndMonth YearAndMonth => new YearAndMonth(Year, Month);
 
         public virtual MonthData MonthData { get; set; }
 
