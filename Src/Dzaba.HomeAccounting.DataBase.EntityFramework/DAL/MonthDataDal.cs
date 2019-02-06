@@ -52,5 +52,27 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
         {
             return m => m.Year > date.Year || m.Year == date.Year && m.Month >= date.Month;
         }
+
+        public async Task AddDataAsync(MonthData data)
+        {
+            Require.NotNull(data, nameof(data));
+
+            using (var dbContext = dbContextFactory())
+            {
+                await dbContext.Months.AddAsync(data);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateDataAsync(MonthData data)
+        {
+            Require.NotNull(data, nameof(data));
+
+            using (var dbContext = dbContextFactory())
+            {
+                dbContext.Months.Update(data);
+                await dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

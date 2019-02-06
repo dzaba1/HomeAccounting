@@ -12,7 +12,15 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public byte Month { get; set; }
 
         [NotMapped]
-        public YearAndMonth YearAndMonth => new YearAndMonth(Year, Month);
+        public YearAndMonth YearAndMonth
+        {
+            get => new YearAndMonth(Year, Month);
+            set
+            {
+                Year = value.Year;
+                Month = value.Month;
+            }
+        }
 
         public int FamilyId { get; set; }
 

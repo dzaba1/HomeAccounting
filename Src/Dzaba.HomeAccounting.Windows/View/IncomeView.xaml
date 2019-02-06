@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:mvvmView="clr-namespace:Dzaba.Mvvm.Windows.View;assembly=Dzaba.Mvvm.Windows"
+             xmlns:t="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Name="incomeView">
@@ -52,16 +53,18 @@
                   SelectedItem="{Binding Path=SelectedReport}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Miesiąc" Binding="{Binding Path=Date}" />
-                <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Income, StringFormat=c}" />
-                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Sum, StringFormat=c}" />
+                <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Report.Income, StringFormat=c}" />
+                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Report.Sum, StringFormat=c}" />
             </DataGrid.Columns>
         </DataGrid>
 
         <Grid Grid.Row="1" Grid.Column="1"
               IsEnabled="{Binding Path=DataContext.IsChangeEnabled, ElementName=incomeView}"
-              DataContext="{Binding Path=Editable}">
+              DataContext="{Binding Path=SelectedReport}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -75,10 +78,24 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Margin="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                      AcceptsTab="True" AcceptsReturn="True" TextWrapping="WrapWithOverflow"
-                     VerticalScrollBarVisibility="Auto" />
+                     VerticalScrollBarVisibility="Auto"
+                     Text="{Binding Path=Notes, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       Style="{StaticResource TextBlockStyle}"
+                       Text="Nadpisz przychód:" />
+            <t:DecimalUpDown Grid.Row="1" Grid.Column="1"
+                             Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                             Value="{Binding Path=IncomeOverride}" />
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                       Style="{StaticResource TextBlockStyle}"
+                       Text="Nadpisz sumę:" />
+            <t:DecimalUpDown Grid.Row="2" Grid.Column="1"
+                             Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                             Value="{Binding Path=SumOverride}" />
             <Button Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="60"
-                    Content="Zapisz" />
+                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="60"
+                    Content="Zapisz"
+                    Command="{Binding Path=DataContext.SaveCommand, ElementName=incomeView}"/>
         </Grid>
 
         <mvvmView:LongOperationView Grid.Row="0" Grid.RowSpan="2"

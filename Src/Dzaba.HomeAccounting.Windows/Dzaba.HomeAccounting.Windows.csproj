@@ -194,7 +194,7 @@
     <Compile Include="ViewModel\IncomeViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MembersViewModel.cs" />
-    <Compile Include="ViewModel\MonthDataViewModel.cs" />
+    <Compile Include="ViewModel\MonthReportViewModel.cs" />
     <Compile Include="ViewModel\OperationsViewModel.cs" />
     <Compile Include="ViewModel\OperationViewModel.cs" />
     <Compile Include="ViewModel\SelectFamilyViewModel.cs" />

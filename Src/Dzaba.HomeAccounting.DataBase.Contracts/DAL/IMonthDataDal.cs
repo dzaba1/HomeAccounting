@@ -8,5 +8,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
     {
         Task<MonthData> GetMonthDataAsync(int familyId, YearAndMonth month);
         Task<MonthData[]> GetMonthsAsync(int familyId, YearAndMonth start, YearAndMonth end);
+        Task AddDataAsync(MonthData data);
+        Task UpdateDataAsync(MonthData data);
     }
 }
