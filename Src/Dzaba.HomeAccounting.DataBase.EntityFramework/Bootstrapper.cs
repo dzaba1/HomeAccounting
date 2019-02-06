@@ -29,6 +29,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
             container.RegisterTransient<IMonthDataDal, MonthDataDal>();
             container.RegisterTransient<IOperationDal, OperationDal>();
             container.RegisterTransient<IScheduledOperationDal, ScheduledOperationDal>();
+            container.RegisterTransient<IFamilyMembersDal, FamilyMembersDal>();
 
             RegisterDbContext(container);
         }

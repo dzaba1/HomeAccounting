@@ -22,21 +22,25 @@ namespace Dzaba.HomeAccounting.Engine
         private readonly IFamilyDal familyDal;
         private readonly IScheduledOperationDal scheduledOperationDal;
         private readonly IOperationDal operationDal;
+        private readonly IFamilyMembersDal familyMembersDal;
 
         public IncomeEngine(IMonthDataDal monthDataDal,
             IFamilyDal familyDal,
             IScheduledOperationDal scheduledOperationDal,
-            IOperationDal operationDal)
+            IOperationDal operationDal,
+            IFamilyMembersDal familyMembersDal)
         {
             Require.NotNull(monthDataDal, nameof(monthDataDal));
             Require.NotNull(familyDal, nameof(familyDal));
             Require.NotNull(scheduledOperationDal, nameof(scheduledOperationDal));
             Require.NotNull(operationDal, nameof(operationDal));
+            Require.NotNull(familyMembersDal, nameof(familyMembersDal));
 
             this.monthDataDal = monthDataDal;
             this.familyDal = familyDal;
             this.scheduledOperationDal = scheduledOperationDal;
             this.operationDal = operationDal;
+            this.familyMembersDal = familyMembersDal;
         }
 
         public async Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end)
@@ -56,7 +60,7 @@ namespace Dzaba.HomeAccounting.Engine
         {
             var familyMonths = await GetMonthsAsync(familyId, start, end);
             var scheduledOperations = await scheduledOperationDal.GetAllAsync(familyId);
-            var memberNames = await familyDal.GetMemberNamesAsync(familyId);
+            var memberNames = await familyMembersDal.GetMemberNamesAsync(familyId);
 
             decimal sum = 0;
             var result = new List<MonthReport>();

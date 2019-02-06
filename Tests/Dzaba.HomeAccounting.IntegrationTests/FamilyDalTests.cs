@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Dzaba.HomeAccounting.IntegrationTests
 {
@@ -18,7 +19,7 @@ namespace Dzaba.HomeAccounting.IntegrationTests
             var id = await sut.AddFamilyAsync(name, new[] { "Mark", "Alice" });
             sut.GetNameAsync(id).Result.Should().Be(name);
 
-            var members = sut.GetMemberNamesAsync(id).Result;
+            var members = await Container.GetRequiredService<IFamilyMembersDal>().GetMemberNamesAsync(id);
             members.Count.Should().Be(2);
         }
     }
