@@ -1,7 +1,6 @@
 ﻿using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
-using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,6 +20,16 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             this.dbContextFactory = dbContextFactory;
         }
 
+        public async Task<Operation[]> GetOperationsAsync(int familyId)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                return await dbContext.Operations
+                    .Where(o => o.FamilyId == familyId)
+                    .ToArrayAsync();
+            }
+        }
+
         public async Task<int> AddOperationAsync(Operation operation)
         {
             Require.NotNull(operation, nameof(operation));
@@ -31,6 +40,16 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
                 await dbContext.SaveChangesAsync();
                 return operation.Id;
             } 
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                var query = dbContext.Operations.Where(o => o.Id == id);
+                dbContext.Operations.RemoveRange(query);
+                await dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<Operation[]> GetOperationsAsync(int familyId, YearAndMonth month)

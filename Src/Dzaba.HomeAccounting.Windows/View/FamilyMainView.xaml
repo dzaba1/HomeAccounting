@@ -36,6 +36,13 @@
                 <local:MembersView mvvmWindows:ViewModel.Type="{x:Type viewModel:MembersViewModel}"
                                    mvvmWindows:ViewModel.Parameter="{Binding Path=DataContext.Id, Mode=OneWay, ElementName=familyMainView}"/>
             </TabItem>
+            <TabItem Header="Operacje">
+                <local:OperationsView mvvmWindows:ViewModel.Type="{x:Type viewModel:OperationsViewModel}"
+                                   mvvmWindows:ViewModel.Parameter="{Binding Path=DataContext.Id, Mode=OneWay, ElementName=familyMainView}"/>
+            </TabItem>
+            <TabItem Header="Ustawienia">
+
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

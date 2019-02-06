@@ -88,5 +88,15 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
                 await dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteAsync(int id)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                var query = dbContext.ScheduledOperations.Where(o => o.Id == id);
+                dbContext.ScheduledOperations.RemoveRange(query);
+                await dbContext.SaveChangesAsync();
+            }
+        }
     }
 }
