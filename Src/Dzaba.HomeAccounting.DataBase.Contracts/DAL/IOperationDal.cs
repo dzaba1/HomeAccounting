@@ -10,5 +10,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
         Task<Operation[]> GetOperationsAsync(int familyId);
         Task<int> AddOperationAsync(Operation operation);
         Task DeleteAsync(int id);
+        Task UpdateAsync(Operation operation);
     }
 }

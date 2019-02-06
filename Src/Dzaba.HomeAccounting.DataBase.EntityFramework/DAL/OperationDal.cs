@@ -52,6 +52,15 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
             }
         }
 
+        public async Task UpdateAsync(Operation operation)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                dbContext.Operations.Update(operation);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task<Operation[]> GetOperationsAsync(int familyId, YearAndMonth month)
         {
             using (var dbContext = dbContextFactory())

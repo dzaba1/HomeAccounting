@@ -98,5 +98,14 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
                 await dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateAsync(ScheduledOperation operation)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                dbContext.ScheduledOperations.Update(operation);
+                await dbContext.SaveChangesAsync();
+            }
+        }
     }
 }

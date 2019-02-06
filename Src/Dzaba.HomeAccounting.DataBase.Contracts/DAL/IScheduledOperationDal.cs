@@ -11,5 +11,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.DAL
         Task<int> AddScheduledOperationAsync(ScheduledOperation operation);
         Task OverrideAsync(YearAndMonth month, int operationId, decimal amount);
         Task DeleteAsync(int id);
+        Task UpdateAsync(ScheduledOperation operation);
     }
 }

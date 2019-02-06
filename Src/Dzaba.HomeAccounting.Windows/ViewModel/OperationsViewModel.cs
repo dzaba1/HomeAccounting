@@ -205,8 +205,8 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                     {
                         _editable.PropertyChanged += RefreshButtons;
                     }
-                    
-                    AddCommand.RaiseCanExecuteChanged();
+
+                    RefreshButtons(null, null);
                 }
             }
         }
@@ -214,6 +214,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         private void RefreshButtons(object sender, PropertyChangedEventArgs e)
         {
             AddCommand.RaiseCanExecuteChanged();
+            UpdateCommand.RaiseCanExecuteChanged();
         }
 
         private ConcurrentObservableCollection<MemberNamePair> _members;
@@ -258,27 +259,12 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
 
                 if (Editable.Scheduled)
                 {
-                    var entity = new ScheduledOperation
-                    {
-                        Amount = Editable.Amount,
-                        Starts = Editable.Date,
-                        Ends = Editable.Ends,
-                        FamilyId = Id,
-                        MemberId = Editable.Member.Id,
-                        Name = Editable.Name
-                    };
+                    var entity = ToScheduledOperation();
                     Editable.Id = await scheduledOperationDal.AddScheduledOperationAsync(entity);
                 }
                 else
                 {
-                    var entity = new Operation
-                    {
-                        Amount = Editable.Amount,
-                        Date = Editable.Date.Value,
-                        FamilyId = Id,
-                        MemberId = Editable.Member.Id,
-                        Name = Editable.Name
-                    };
+                    var entity = ToOneTimeOperation();
                     Editable.Id = await operationDal.AddOperationAsync(entity);
                 }
 
@@ -293,6 +279,45 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             {
                 Loading = false;
             }
+        }
+
+        private ScheduledOperation ToScheduledOperation()
+        {
+            var entity = new ScheduledOperation
+            {
+                Amount = Editable.Amount,
+                Starts = Editable.Date,
+                Ends = Editable.Ends,
+                FamilyId = Id,
+                MemberId = Editable.Member.Id,
+                Name = Editable.Name
+            };
+
+            if (Editable.Id.HasValue)
+            {
+                entity.Id = Editable.Id.Value;
+            }
+
+            return entity;
+        }
+
+        private Operation ToOneTimeOperation()
+        {
+            var entity = new Operation
+            {
+                Amount = Editable.Amount,
+                Date = Editable.Date.Value,
+                FamilyId = Id,
+                MemberId = Editable.Member.Id,
+                Name = Editable.Name
+            };
+
+            if (Editable.Id.HasValue)
+            {
+                entity.Id = Editable.Id.Value;
+            }
+
+            return entity;
         }
 
         private DelegateCommand<OperationViewModel> _deleteCommand;
@@ -326,6 +351,53 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 else
                 {
                     await operationDal.DeleteAsync(operation.Id.Value);
+                }
+
+                await RefreshOperations();
+            }
+            catch (Exception ex)
+            {
+                interaction.ShowError(ex, "Error");
+            }
+            finally
+            {
+                Loading = false;
+            }
+        }
+
+        private DelegateCommand _updateCommand;
+        public DelegateCommand UpdateCommand
+        {
+            get
+            {
+                if (_updateCommand == null)
+                {
+                    _updateCommand = new DelegateCommand(OnUpdate, () => CanAdd() && Editable.Id.HasValue);
+                }
+                return _updateCommand;
+            }
+        }
+
+        private async void OnUpdate()
+        {
+            try
+            {
+                if (!interaction.YesNoQuestion("Czy na pewno chesz zmienić operację?"))
+                {
+                    return;
+                }
+
+                Loading = true;
+
+                if (Editable.Scheduled)
+                {
+                    var entity = ToScheduledOperation();
+                    await scheduledOperationDal.UpdateAsync(entity);
+                }
+                else
+                {
+                    var entity = ToOneTimeOperation();
+                    await operationDal.UpdateAsync(entity);
                 }
 
                 await RefreshOperations();

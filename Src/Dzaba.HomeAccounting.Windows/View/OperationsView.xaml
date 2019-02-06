@@ -109,7 +109,8 @@
                         Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
                         VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Margin="3" MinWidth="60"
-                        Content="Zmień" />
+                        Content="Zmień"
+                        Command="{Binding Path=DataContext.UpdateCommand, ElementName=operationsView}"/>
                 <Button Margin="3" MinWidth="60"
                         Content="Dodaj"
                         Command="{Binding Path=DataContext.AddCommand, ElementName=operationsView}"/>
