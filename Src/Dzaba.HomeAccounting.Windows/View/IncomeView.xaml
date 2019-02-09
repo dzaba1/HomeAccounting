@@ -43,12 +43,9 @@
                     Command="{Binding Path=CalculateCommand}" />
         </StackPanel>
 
-        <DataGrid Grid.Row="1" Grid.Column="0" Margin="3"
-                  AutoGenerateColumns="False" CanUserAddRows="False"
-                  CanUserDeleteRows="False" CanUserReorderColumns="False"
-                  CanUserResizeColumns="True" CanUserResizeRows="False"
-                  CanUserSortColumns="False" IsReadOnly="True"
-                  SelectionMode="Single"
+        <DataGrid Grid.Row="1" Grid.Column="0"
+                  CanUserSortColumns="False"
+                  Style="{StaticResource ReadOnlyDataGridStyle}"
                   ItemsSource="{Binding Path=Report}"
                   SelectedItem="{Binding Path=SelectedReport}">
             <DataGrid.Columns>
@@ -85,13 +82,13 @@
                        Text="Nadpisz przychód:" />
             <t:DecimalUpDown Grid.Row="1" Grid.Column="1"
                              Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                             Value="{Binding Path=IncomeOverride}" />
+                             Value="{Binding Path=IncomeOverride}" FormatString="c" />
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Style="{StaticResource TextBlockStyle}"
                        Text="Nadpisz sumę:" />
             <t:DecimalUpDown Grid.Row="2" Grid.Column="1"
                              Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                             Value="{Binding Path=SumOverride}" />
+                             Value="{Binding Path=SumOverride}" FormatString="c" />
             <Button Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center"
                     Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MinWidth="60"
                     Content="Zapisz"

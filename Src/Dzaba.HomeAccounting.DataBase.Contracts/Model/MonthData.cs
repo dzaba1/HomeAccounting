@@ -31,9 +31,5 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public decimal? TotalOverride { get; set; }
 
         public string Notes { get; set; }
-
-        public virtual ICollection<Operation> Operations { get; set; }
-
-        public virtual ICollection<ScheduledOperationOverride> ScheduledOperationOverrides { get; set; }
     }
 }

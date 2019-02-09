@@ -107,5 +107,26 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.DAL
                 await dbContext.SaveChangesAsync();
             }
         }
+
+        public async Task<ScheduledOperationOverride[]> GetOverridesForOperationAsync(int operationId)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                return await dbContext.ScheduledOperationOverrides
+                    .Where(o => o.OperationId == operationId)
+                    .OrderByDescending(o => o.Year)
+                    .ThenByDescending(o => o.Month)
+                    .ToArrayAsync();
+            }
+        }
+
+        public async Task<ScheduledOperation> GetAsync(int id)
+        {
+            using (var dbContext = dbContextFactory())
+            {
+                return await dbContext.ScheduledOperations
+                    .FirstOrDefaultAsync(o => o.Id == id);
+            }
+        }
     }
 }

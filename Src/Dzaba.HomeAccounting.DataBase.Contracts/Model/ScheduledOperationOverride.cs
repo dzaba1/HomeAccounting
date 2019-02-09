@@ -11,9 +11,18 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public byte Month { get; set; }
 
         [NotMapped]
-        public YearAndMonth YearAndMonth => new YearAndMonth(Year, Month);
-
-        public virtual MonthData MonthData { get; set; }
+        public YearAndMonth YearAndMonth
+        {
+            get
+            {
+                return new YearAndMonth(Year, Month);
+            }
+            set
+            {
+                Year = value.Year;
+                Month = value.Month;
+            }
+        }
 
         public int OperationId { get; set; }
 

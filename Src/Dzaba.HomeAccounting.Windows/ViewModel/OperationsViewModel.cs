@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Windows.Model;
+using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm;
 using Dzaba.Mvvm.Windows;
+using Dzaba.Mvvm.Windows.Navigation;
 using Dzaba.Utils;
 
 namespace Dzaba.HomeAccounting.Windows.ViewModel
@@ -19,22 +21,26 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         private readonly IOperationDal operationDal;
         private readonly IScheduledOperationDal scheduledOperationDal;
         private readonly IFamilyMembersDal membersDal;
+        private readonly INavigationService navigation;
         private IReadOnlyDictionary<int, string> members;
 
         public OperationsViewModel(IInteractionService interaction,
             IOperationDal operationDal,
             IScheduledOperationDal scheduledOperationDal,
-            IFamilyMembersDal membersDal)
+            IFamilyMembersDal membersDal,
+            INavigationService navigation)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(operationDal, nameof(operationDal));
             Require.NotNull(scheduledOperationDal, nameof(scheduledOperationDal));
             Require.NotNull(membersDal, nameof(membersDal));
+            Require.NotNull(navigation, nameof(navigation));
 
             this.interaction = interaction;
             this.operationDal = operationDal;
             this.scheduledOperationDal = scheduledOperationDal;
             this.membersDal = membersDal;
+            this.navigation = navigation;
 
             Editable = new OperationViewModel();
         }
@@ -409,6 +415,31 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             finally
             {
                 Loading = false;
+            }
+        }
+
+        private DelegateCommand<OperationViewModel> _overrideCommand;
+        public DelegateCommand<OperationViewModel> OverrideCommand
+        {
+            get
+            {
+                if (_overrideCommand == null)
+                {
+                    _overrideCommand = new DelegateCommand<OperationViewModel>(OnOverride);
+                }
+                return _overrideCommand;
+            }
+        }
+
+        private void OnOverride(OperationViewModel operation)
+        {
+            try
+            {
+                navigation.ShowView<OperationOverridesView>(operation.Id.Value);
+            }
+            catch (Exception ex)
+            {
+                interaction.ShowError(ex, "Error");
             }
         }
     }

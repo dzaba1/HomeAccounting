@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mvvmView="clr-namespace:Dzaba.Mvvm.Windows.View;assembly=Dzaba.Mvvm.Windows"
         mc:Ignorable="d"
-        Title="Home Accounting" Height="600" Width="900">
+        Title="Home Accounting" Height="600" Width="950"
+        ResizeMode="CanResizeWithGrip">
     <Grid>
         <mvvmView:NavigationContainer Margin="15" />
     </Grid>

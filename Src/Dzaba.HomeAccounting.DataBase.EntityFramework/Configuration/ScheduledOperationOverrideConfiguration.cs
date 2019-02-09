@@ -9,11 +9,6 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.Configuration
         protected override void Configure(EntityTypeBuilder<ScheduledOperationOverride> builder)
         {
             builder.HasKey(p => new { p.Year, p.Month, p.OperationId });
-            builder.HasOne(p => p.MonthData)
-                .WithMany(p => p.ScheduledOperationOverrides)
-                .HasForeignKey(p => new { p.Year, p.Month })
-                .HasPrincipalKey(p => new { p.Year, p.Month})
-                .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(p => p.Operation)
                 .WithMany(p => p.Overrides)
                 .HasForeignKey(p => p.OperationId)
