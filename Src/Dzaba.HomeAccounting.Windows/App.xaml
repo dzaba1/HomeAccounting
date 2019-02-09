@@ -10,7 +10,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:ToLocalCurrencyConverter x:Key="ToLocalCurrencyConverter" />
+            <converters:StringFormatConverter x:Key="StringFormatConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

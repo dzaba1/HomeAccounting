@@ -17,20 +17,20 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Column="0"
                   Style="{StaticResource ReadOnlyDataGridStyle}"
                   ItemsSource="{Binding Operations, Mode=OneWay}"
                   SelectedItem="{Binding Path=SelectedOperation}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Data" Binding="{Binding Path=Date}" />
+                <DataGridTextColumn Header="Data" Binding="{Binding Path=Date, Converter={StaticResource StringFormatConverter}, ConverterParameter=d}" />
                 <DataGridTextColumn Header="Nazwa" Binding="{Binding Path=Name}" />
-                <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, Converter={StaticResource ToLocalCurrencyConverter}}" />
+                <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
                 <DataGridTextColumn Header="Członek" Binding="{Binding Path=Member.Name}" />
                 <DataGridCheckBoxColumn Header="Miesięczna" Binding="{Binding Path=Scheduled}" />
-                <DataGridTextColumn Header="Kończy się" Binding="{Binding Path=Ends}" />
+                <DataGridTextColumn Header="Kończy się" Binding="{Binding Path=Ends, Converter={StaticResource StringFormatConverter}, ConverterParameter=d}" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -56,7 +56,8 @@
         </DataGrid>
 
         <Grid Grid.Column="1"
-              DataContext="{Binding Path=Editable}">
+              DataContext="{Binding Path=Editable}"
+              MinWidth="230">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />

@@ -50,8 +50,8 @@
                   SelectedItem="{Binding Path=SelectedReport}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Miesiąc" Binding="{Binding Path=Date}" />
-                <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Report.Income, Converter={StaticResource ToLocalCurrencyConverter}}" />
-                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Report.Sum, Converter={StaticResource ToLocalCurrencyConverter}}" />
+                <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Report.Income, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
+                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Report.Sum, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
             </DataGrid.Columns>
         </DataGrid>
 
