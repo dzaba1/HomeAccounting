@@ -96,6 +96,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 _from = value;
                 RaisePropertyChanged();
                 CalculateCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -108,6 +109,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 _to = value;
                 RaisePropertyChanged();
                 CalculateCommand.RaiseCanExecuteChanged();
+                SaveCommand.RaiseCanExecuteChanged();
             }
         }
 
