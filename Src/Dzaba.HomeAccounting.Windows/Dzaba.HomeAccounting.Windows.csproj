@@ -189,6 +189,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Consts.cs" />
+    <Compile Include="Converters\ToLocalCurrencyConverter.cs" />
     <Compile Include="Model\MemberNamePair.cs" />
     <Compile Include="ViewModel\FamilyMainViewModel.cs" />
     <Compile Include="ViewModel\IncomeViewModel.cs" />

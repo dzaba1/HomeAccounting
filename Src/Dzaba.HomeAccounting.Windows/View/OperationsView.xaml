@@ -27,7 +27,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Data" Binding="{Binding Path=Date}" />
                 <DataGridTextColumn Header="Nazwa" Binding="{Binding Path=Name}" />
-                <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, StringFormat=c}" />
+                <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, Converter={StaticResource ToLocalCurrencyConverter}}" />
                 <DataGridTextColumn Header="Członek" Binding="{Binding Path=Member.Name}" />
                 <DataGridCheckBoxColumn Header="Miesięczna" Binding="{Binding Path=Scheduled}" />
                 <DataGridTextColumn Header="Kończy się" Binding="{Binding Path=Ends}" />

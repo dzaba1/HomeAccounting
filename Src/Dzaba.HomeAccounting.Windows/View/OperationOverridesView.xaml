@@ -40,7 +40,7 @@
                   SelectedItem="{Binding Path=SelectedOverride}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Data" Binding="{Binding Path=YearAndMonth}" />
-                <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, StringFormat=c}" />
+                <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, Converter={StaticResource ToLocalCurrencyConverter}}" />
             </DataGrid.Columns>
         </DataGrid>
 
