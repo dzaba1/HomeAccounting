@@ -3,6 +3,7 @@ using Dzaba.HomeAccounting.DataBase.EntityFramework;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite;
 using Dzaba.HomeAccounting.Engine;
 using Dzaba.HomeAccounting.Utils;
+using Dzaba.HomeAccounting.Windows.Model;
 using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.HomeAccounting.Windows.ViewModel;
 using Dzaba.Mvvm;
@@ -32,6 +33,7 @@ namespace Dzaba.HomeAccounting.Windows
         private static void RegisterApp(this IKernel container)
         {
             container.RegisterTransient<IConnectionStringProvider, ConnectionStringProvider>();
+            container.RegisterTransient<INavigationFacade, NavigationFacade>();
 
             container.RegisterView<MainWindow, MainViewModel>(true);
             container.RegisterView<SelectFamilyView, SelectFamilyViewModel>();
@@ -40,6 +42,11 @@ namespace Dzaba.HomeAccounting.Windows
             container.RegisterView<OperationsView, OperationsViewModel>();
             container.RegisterView<IncomeView, IncomeViewModel>();
             container.RegisterView<OperationOverridesView, OperationOverridesViewModel>();
+            container.RegisterViewModel<BreadcrumbService>(true);
+            container.Bind<IBreadcrumbService>()
+                .ToMethod(c => c.Kernel.Get<BreadcrumbService>())
+                .InTransientScope();
+            container.RegisterView<BreadcrumbView>(true);
         }
     }
 }

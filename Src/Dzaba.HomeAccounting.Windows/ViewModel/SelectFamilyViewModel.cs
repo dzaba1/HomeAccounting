@@ -7,6 +7,8 @@ using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm.Windows;
 using Dzaba.Mvvm.Windows.Navigation;
 using Dzaba.Utils;
+using Dzaba.HomeAccounting.Windows.Model;
+using System.Linq;
 
 namespace Dzaba.HomeAccounting.Windows.ViewModel
 {
@@ -14,11 +16,11 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
     {
         private readonly IInteractionService interaction;
         private readonly IFamilyDal familyDal;
-        private readonly INavigationService navigation;
+        private readonly INavigationFacade navigation;
 
         public SelectFamilyViewModel(IInteractionService interaction,
             IFamilyDal familyDal,
-            INavigationService navigation)
+            INavigationFacade navigation)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(familyDal, nameof(familyDal));
@@ -61,7 +63,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             {
                 FamiliesListLoading = true;
                 var id = await familyDal.AddFamilyAsync(NewFamilyName);
-                navigation.ShowView<FamilyMainView>(id);
+                navigation.ShowView<FamilyMainView>(NewFamilyName, id);
             }
             catch (Exception ex)
             {
@@ -195,7 +197,8 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         {
             try
             {
-                navigation.ShowView<FamilyMainView>(id.Value);
+                var name = Families.First(f => f.Key == id.Value).Value;
+                navigation.ShowView<FamilyMainView>(name, id.Value);
             }
             catch (Exception ex)
             {

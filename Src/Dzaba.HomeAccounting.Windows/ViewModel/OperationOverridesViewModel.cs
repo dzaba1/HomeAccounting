@@ -1,16 +1,11 @@
-﻿using Dzaba.HomeAccounting.Contracts;
-using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
+﻿using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
-using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm;
 using Dzaba.Mvvm.Navigation;
-using Dzaba.Mvvm.Windows.Navigation;
 using Dzaba.Utils;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Dzaba.HomeAccounting.Windows.ViewModel
@@ -19,19 +14,15 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
     {
         private readonly IInteractionService interaction;
         private readonly IScheduledOperationDal operationDal;
-        private readonly INavigationService navigation;
 
         public OperationOverridesViewModel(IInteractionService interaction,
-            IScheduledOperationDal operationDal,
-            INavigationService navigation)
+            IScheduledOperationDal operationDal)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(operationDal, nameof(operationDal));
-            Require.NotNull(navigation, nameof(navigation));
 
             this.interaction = interaction;
             this.operationDal = operationDal;
-            this.navigation = navigation;
 
             Editable = new OperationOverrideViewModel();
         }
@@ -146,31 +137,6 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             {
                 _operation = value;
                 RaisePropertyChanged();
-            }
-        }
-
-        private DelegateCommand _backCommand;
-        public DelegateCommand BackCommand
-        {
-            get
-            {
-                if (_backCommand == null)
-                {
-                    _backCommand = new DelegateCommand(OnBack);
-                }
-                return _backCommand;
-            }
-        }
-
-        private void OnBack()
-        {
-            try
-            {
-                navigation.ShowView<FamilyMainView>(Operation.FamilyId);
-            }
-            catch (Exception ex)
-            {
-                interaction.ShowError(ex, "Error");
             }
         }
 

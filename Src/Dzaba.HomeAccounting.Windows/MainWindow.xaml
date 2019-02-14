@@ -4,10 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:mvvmView="clr-namespace:Dzaba.Mvvm.Windows.View;assembly=Dzaba.Mvvm.Windows"
+        xmlns:mvvmWindows="clr-namespace:Dzaba.Mvvm.Windows;assembly=Dzaba.Mvvm.Windows"
+        xmlns:view="clr-namespace:Dzaba.HomeAccounting.Windows.View"
+        xmlns:viewModel="clr-namespace:Dzaba.HomeAccounting.Windows.ViewModel"
         mc:Ignorable="d"
         Title="Home Accounting" Height="600" Width="950"
         ResizeMode="CanResizeWithGrip">
-    <Grid>
-        <mvvmView:NavigationContainer Margin="15" />
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <view:BreadcrumbView Grid.Row="0" mvvmWindows:ViewModel.Type="{x:Type viewModel:BreadcrumbService}" />
+        <mvvmView:NavigationContainer Grid.Row="1" />
     </Grid>
 </Window>

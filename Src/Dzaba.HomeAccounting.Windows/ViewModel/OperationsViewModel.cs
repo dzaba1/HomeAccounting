@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
@@ -10,7 +9,6 @@ using Dzaba.HomeAccounting.Windows.Model;
 using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm;
 using Dzaba.Mvvm.Windows;
-using Dzaba.Mvvm.Windows.Navigation;
 using Dzaba.Utils;
 
 namespace Dzaba.HomeAccounting.Windows.ViewModel
@@ -21,14 +19,14 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         private readonly IOperationDal operationDal;
         private readonly IScheduledOperationDal scheduledOperationDal;
         private readonly IFamilyMembersDal membersDal;
-        private readonly INavigationService navigation;
+        private readonly INavigationFacade navigation;
         private IReadOnlyDictionary<int, string> members;
 
         public OperationsViewModel(IInteractionService interaction,
             IOperationDal operationDal,
             IScheduledOperationDal scheduledOperationDal,
             IFamilyMembersDal membersDal,
-            INavigationService navigation)
+            INavigationFacade navigation)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(operationDal, nameof(operationDal));
@@ -435,7 +433,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         {
             try
             {
-                navigation.ShowView<OperationOverridesView>(operation.Id.Value);
+                navigation.ShowView<OperationOverridesView>(operation.Name, operation.Id.Value);
             }
             catch (Exception ex)
             {

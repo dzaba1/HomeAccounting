@@ -20,7 +20,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -28,13 +27,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                    Orientation="Horizontal">
-            <Button Content="Wróć" Margin="3" MinWidth="50"
-                    Command="{Binding Path=BackCommand}"/>
-        </StackPanel>
-        
-        <DataGrid Grid.Column="0" Grid.Row="2"
+        <DataGrid Grid.Column="0" Grid.Row="1"
                   Style="{StaticResource ReadOnlyDataGridStyle}"
                   ItemsSource="{Binding Overrides, Mode=OneWay}"
                   SelectedItem="{Binding Path=SelectedOverride}">
@@ -44,11 +37,11 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <TextBlock Grid.Row="1" Margin="6" Grid.Column="0" Grid.ColumnSpan="2"
+        <TextBlock Grid.Row="0" Margin="6" Grid.Column="0" Grid.ColumnSpan="2"
                    Text="{Binding Path=Operation.Name}"
                    FontSize="18" />
         
-        <Grid Grid.Column="1" Grid.Row="2"
+        <Grid Grid.Column="1" Grid.Row="1"
               DataContext="{Binding Path=Editable}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -79,7 +72,7 @@
                         Command="{Binding Path=DataContext.OverrideCommand, ElementName=operationOverridesView}"/>
         </Grid>
 
-        <mvvmView:LongOperationView Grid.Row="0" Grid.RowSpan="3"
+        <mvvmView:LongOperationView Grid.Row="0" Grid.RowSpan="2"
                                     Grid.Column="0" Grid.ColumnSpan="2"
                                     Message="Ładowanie" Show="{Binding Path=Loading}" />
     </Grid>
