@@ -7,6 +7,8 @@ using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Engine;
+using Dzaba.HomeAccounting.Windows.Model;
+using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm;
 using Dzaba.Utils;
 
@@ -17,18 +19,22 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         private readonly IInteractionService interaction;
         private readonly IIncomeEngine incomeEngine;
         private readonly IMonthDataDal monthsDal;
+        private readonly INavigationFacade navigation;
 
         public IncomeViewModel(IInteractionService interaction,
             IIncomeEngine incomeEngine,
-            IMonthDataDal monthsDal)
+            IMonthDataDal monthsDal,
+            INavigationFacade navigation)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(incomeEngine, nameof(incomeEngine));
             Require.NotNull(monthsDal, nameof(monthsDal));
+            Require.NotNull(navigation, nameof(navigation));
 
             this.interaction = interaction;
             this.incomeEngine = incomeEngine;
             this.monthsDal = monthsDal;
+            this.navigation = navigation;
         }
 
         private int _id;
@@ -244,6 +250,31 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             finally
             {
                 Loading = false;
+            }
+        }
+
+        private DelegateCommand<MonthReportViewModel> _showMonthCommand;
+        public DelegateCommand<MonthReportViewModel> ShowMonthCommand
+        {
+            get
+            {
+                if (_showMonthCommand == null)
+                {
+                    _showMonthCommand = new DelegateCommand<MonthReportViewModel>(OnShowMonthCommand, r => r != null);
+                }
+                return _showMonthCommand;
+            }
+        }
+
+        private void OnShowMonthCommand(MonthReportViewModel report)
+        {
+            try
+            {
+                navigation.ShowView<MonthView>(report.PrettyName, report);
+            }
+            catch (Exception ex)
+            {
+                interaction.ShowError(ex, "Error");
             }
         }
     }

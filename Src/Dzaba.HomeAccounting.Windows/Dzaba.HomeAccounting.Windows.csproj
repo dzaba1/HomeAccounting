@@ -209,6 +209,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MembersViewModel.cs" />
     <Compile Include="ViewModel\MonthReportViewModel.cs" />
+    <Compile Include="ViewModel\MonthViewModel.cs" />
     <Compile Include="ViewModel\OperationOverridesViewModel.cs" />
     <Compile Include="ViewModel\OperationOverrideViewModel.cs" />
     <Compile Include="ViewModel\OperationsViewModel.cs" />
@@ -225,6 +226,9 @@
     </Compile>
     <Compile Include="View\MembersView.xaml.cs">
       <DependentUpon>MembersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MonthView.xaml.cs">
+      <DependentUpon>MonthView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\OperationOverridesView.xaml.cs">
       <DependentUpon>OperationOverridesView.xaml</DependentUpon>
@@ -266,6 +270,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MembersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MonthView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

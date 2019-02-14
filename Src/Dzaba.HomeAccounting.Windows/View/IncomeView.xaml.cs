@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dzaba.HomeAccounting.Windows.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,21 @@ namespace Dzaba.HomeAccounting.Windows.View
         public IncomeView()
         {
             InitializeComponent();
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            var vm = DataContext as IncomeViewModel;
+
+            if (vm != null && row != null)
+            {
+                var item = row.Item;
+                if (vm.ShowMonthCommand.CanExecute(item))
+                {
+                    vm.ShowMonthCommand.Execute(item);
+                }
+            }
         }
     }
 }

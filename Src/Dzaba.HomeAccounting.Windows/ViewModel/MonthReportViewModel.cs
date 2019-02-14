@@ -69,5 +69,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public string PrettyName => Date.ToDateTime().ToString("MMMM yyyy");
     }
 }
