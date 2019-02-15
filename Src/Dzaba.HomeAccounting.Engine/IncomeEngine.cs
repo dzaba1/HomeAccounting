@@ -58,56 +58,75 @@ namespace Dzaba.HomeAccounting.Engine
         private async Task<MonthReport[]> CalculateReportsAsync(int familyId, YearAndMonth start, YearAndMonth end)
         {
             var familyMonths = await GetMonthsAsync(familyId, start, end);
-            var scheduledOperations = await scheduledOperationDal.GetAllAsync(familyId);
-            var memberNames = await familyMembersDal.GetMemberNamesAsync(familyId);
+            var data = new IncomeBuilderData
+            {
+                AllScheduledOperations = await scheduledOperationDal.GetAllAsync(familyId),
+                FamilyId = familyId,
+                MemberNames = await familyMembersDal.GetMemberNamesAsync(familyId)
+            };
 
             decimal sum = 0;
             var result = new List<MonthReport>();
             foreach (var month in EnumerateMonths(start, end))
             {
-                var monthReport = new MonthReport
+                var monthData = new CurrentMonthData
                 {
-                    Date = month
+                    MonthReport = new MonthReport
+                    {
+                        Date = month
+                    },
+                    Month = month
                 };
 
-                decimal income = 0;
-                var predict = !familyMonths.TryGetValue(month, out MonthData monthData);
+                if (familyMonths.TryGetValue(month, out MonthData monthDataTemp))
+                {
+                    monthData.MonthData = monthDataTemp;
+                };
 
-                if (!predict && monthData.IncomeOverride.HasValue)
-                {
-                    income = monthData.IncomeOverride.Value;
-                }
-                else
-                {
-                    income = CheckScheduledOperations(scheduledOperations, month, monthReport, memberNames);
-                    income = await CheckOperationOverridesAsync(familyId, month, income, monthReport);
-                    income += await CheckOperationsAsync(familyId, month, monthReport, memberNames);
-                    monthReport.Income = income;
-                }
+                decimal income = await CalculateIncomeAsync(monthData, data);
 
-                if (!predict)
+                if (monthData.MonthData != null)
                 {
-                    sum = CheckTotalOverride(sum, income, monthData);
+                    sum = CheckTotalOverride(sum, income, monthData.MonthData);
                 }
                 else
                 {
                     sum += income;
                 }
 
-                monthReport.Sum = sum;
-                result.Add(monthReport);
+                monthData.MonthReport.Sum = sum;
+                result.Add(monthData.MonthReport);
             }
 
             return result.ToArray();
         }
 
-        private async Task<decimal> CheckOperationsAsync(int familyId, YearAndMonth month, MonthReport report, IReadOnlyDictionary<int, string> members)
+        private async Task<decimal> CalculateIncomeAsync(CurrentMonthData monthData, IncomeBuilderData data)
         {
-            var operations = await operationDal.GetOperationsAsync(familyId, month);
-            return CheckOperations(operations, report, members);
+            decimal income = 0;
+
+            if (monthData.MonthData != null && monthData.MonthData.IncomeOverride.HasValue)
+            {
+                income = monthData.MonthData.IncomeOverride.Value;
+            }
+            else
+            {
+                income = CheckScheduledOperations(data, monthData);
+                income = await CheckOperationOverridesAsync(data, income, monthData);
+                income += await CheckOperationsAsync(monthData, data);
+                monthData.MonthReport.Income = income;
+            }
+
+            return income;
         }
 
-        private decimal CheckOperations(IEnumerable<IOperation> operations, MonthReport report, IReadOnlyDictionary<int, string> members)
+        private async Task<decimal> CheckOperationsAsync(CurrentMonthData monthData, IncomeBuilderData data)
+        {
+            var operations = await operationDal.GetOperationsAsync(data.FamilyId, monthData.Month);
+            return CheckOperations(operations, monthData.MonthReport, data);
+        }
+
+        private decimal CheckOperations(IEnumerable<IOperation> operations, MonthReport report, IncomeBuilderData data)
         {
             decimal income = 0;
 
@@ -117,7 +136,7 @@ namespace Dzaba.HomeAccounting.Engine
 
                 if (operation.MemberId.HasValue)
                 {
-                    var member = new KeyValuePair<int, string>(operation.MemberId.Value, members[operation.MemberId.Value]);                
+                    var member = new KeyValuePair<int, string>(operation.MemberId.Value, data.MemberNames[operation.MemberId.Value]);                
                     operationReport.Member = member;
                 }
 
@@ -128,14 +147,13 @@ namespace Dzaba.HomeAccounting.Engine
             return income;
         }
 
-        private async Task<decimal> CheckOperationOverridesAsync(int familyId, YearAndMonth month,
-            decimal income, MonthReport report)
+        private async Task<decimal> CheckOperationOverridesAsync(IncomeBuilderData data, decimal income, CurrentMonthData monthData)
         {
             var currentIncome = income;
-            var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(familyId, month);
+            var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(data.FamilyId, monthData.Month);
             foreach (var overrideEntry in overrides)
             {
-                OverrideOperation(report.Operations, overrideEntry);
+                OverrideOperation(monthData.MonthReport.Operations, overrideEntry);
                 currentIncome = OverrideAmount(currentIncome, overrideEntry);
             }
 
@@ -160,11 +178,10 @@ namespace Dzaba.HomeAccounting.Engine
             }
         }
 
-        private decimal CheckScheduledOperations(ScheduledOperation[] scheduledOperations, YearAndMonth month,
-            MonthReport report, IReadOnlyDictionary<int, string> members)
+        private decimal CheckScheduledOperations(IncomeBuilderData data, CurrentMonthData monthData)
         {
-            var monthlyScheduledOperations = scheduledOperations.Where(o => IsActive(o, month.ToDateTime()));
-            return CheckOperations(monthlyScheduledOperations, report, members);
+            var monthlyScheduledOperations = data.AllScheduledOperations.Where(o => IsActive(o, monthData.Month.ToDateTime()));
+            return CheckOperations(monthlyScheduledOperations, monthData.MonthReport, data);
         }
 
         private bool IsActive(ScheduledOperation operation, DateTime month)
