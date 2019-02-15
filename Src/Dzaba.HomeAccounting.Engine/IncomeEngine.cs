@@ -12,6 +12,7 @@ namespace Dzaba.HomeAccounting.Engine
     public interface IIncomeEngine
     {
         Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end);
+        Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth month);
     }
 
     internal sealed class IncomeEngine : IIncomeEngine
@@ -55,15 +56,33 @@ namespace Dzaba.HomeAccounting.Engine
             };
         }
 
-        private async Task<MonthReport[]> CalculateReportsAsync(int familyId, YearAndMonth start, YearAndMonth end)
+        public async Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth month)
         {
-            var familyMonths = await GetMonthsAsync(familyId, start, end);
-            var data = new IncomeBuilderData
+            var reportTask = CalculateReportAsync(familyId, month);
+            var familyTask = familyDal.GetNameAsync(familyId);
+
+            return new FamilyReport
+            {
+                Reports = new[] { await reportTask },
+                FamilyId = familyId,
+                FamilyName = await familyTask
+            };
+        }
+
+        private async Task<IncomeBuilderData> GetDataAsync(int familyId)
+        {
+            return new IncomeBuilderData
             {
                 AllScheduledOperations = await scheduledOperationDal.GetAllAsync(familyId),
                 FamilyId = familyId,
                 MemberNames = await familyMembersDal.GetMemberNamesAsync(familyId)
             };
+        }
+
+        private async Task<MonthReport[]> CalculateReportsAsync(int familyId, YearAndMonth start, YearAndMonth end)
+        {
+            var familyMonths = await GetMonthsAsync(familyId, start, end);
+            var data = await GetDataAsync(familyId);
 
             decimal sum = 0;
             var result = new List<MonthReport>();
@@ -84,21 +103,46 @@ namespace Dzaba.HomeAccounting.Engine
                 };
 
                 decimal income = await CalculateIncomeAsync(monthData, data);
-
-                if (monthData.MonthData != null)
-                {
-                    sum = CheckTotalOverride(sum, income, monthData.MonthData);
-                }
-                else
-                {
-                    sum += income;
-                }
-
-                monthData.MonthReport.Sum = sum;
+                sum = CheckSum(monthData, sum, income);
                 result.Add(monthData.MonthReport);
             }
 
             return result.ToArray();
+        }
+
+        private async Task<MonthReport> CalculateReportAsync(int familyId, YearAndMonth month)
+        {
+            var data = await GetDataAsync(familyId);
+            var monthData = new CurrentMonthData
+            {
+                MonthReport = new MonthReport
+                {
+                    Date = month
+                },
+                Month = month,
+                MonthData = await monthDataDal.GetMonthDataAsync(familyId, month)
+            };
+
+            decimal income = await CalculateIncomeAsync(monthData, data);
+            CheckSum(monthData, income, income);
+            return monthData.MonthReport;
+        }
+
+        private decimal CheckSum(CurrentMonthData monthData, decimal currentSum, decimal income)
+        {
+            decimal sum = currentSum;
+
+            if (monthData.MonthData != null)
+            {
+                sum = CheckTotalOverride(sum, income, monthData.MonthData);
+            }
+            else
+            {
+                sum += income;
+            }
+
+            monthData.MonthReport.Sum = sum;
+            return sum;
         }
 
         private async Task<decimal> CalculateIncomeAsync(CurrentMonthData monthData, IncomeBuilderData data)
