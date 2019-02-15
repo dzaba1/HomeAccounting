@@ -232,9 +232,9 @@ namespace Dzaba.HomeAccounting.Engine
         {
             bool isActive = true;
 
-            if (operation.Date.HasValue)
+            if (operation.Starts.HasValue)
             {
-                isActive = comparer.Compare(month, operation.Date.Value) >= 0;
+                isActive = comparer.Compare(month, operation.Starts.Value) >= 0;
             }
 
             if (isActive && operation.Ends.HasValue)

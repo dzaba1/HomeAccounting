@@ -19,7 +19,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         bool HasConstantDate { get; set; }
 
-        DateTime? Date { get; }
+        DateTime? DayDate { get; }
 
         OperationReport ToOperationReport(YearAndMonth currentMonth);
     }

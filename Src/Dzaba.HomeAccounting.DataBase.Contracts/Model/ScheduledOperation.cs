@@ -28,16 +28,18 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual FamilyMember Member { get; set; }
 
-        [Column("Starts")]
-        public DateTime? Date { get; set; }
+        public DateTime? Starts { get; set; }
 
         public DateTime? Ends { get; set; }
+
+        [NotMapped]
+        public DateTime? DayDate => Starts;
 
         public virtual ICollection<ScheduledOperationOverride> Overrides { get; set; }
 
         public OperationReport ToOperationReport(YearAndMonth currentMonth)
         {
-            var day = Date.HasValue ? Date.Value.Day : 1;
+            var day = Starts.HasValue ? Starts.Value.Day : 1;
 
             return new OperationReport
             {
