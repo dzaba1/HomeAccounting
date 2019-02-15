@@ -32,14 +32,17 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual ICollection<ScheduledOperationOverride> Overrides { get; set; }
 
-        public OperationReport ToOperationReport()
+        public OperationReport ToOperationReport(YearAndMonth currentMonth)
         {
+            var day = Starts.HasValue ? Starts.Value.Day : 1;
+
             return new OperationReport
             {
                 Amount = Amount,
                 Id = Id,
                 Name = Name,
-                IsScheduled = true
+                IsScheduled = true,
+                Date = new DateTime(currentMonth.Year, currentMonth.Month, day)
             };
         }
     }

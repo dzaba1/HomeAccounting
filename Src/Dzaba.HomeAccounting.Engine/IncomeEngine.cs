@@ -1,7 +1,6 @@
 ﻿using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
-using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using System;
 using System.Collections.Generic;
@@ -68,14 +67,7 @@ namespace Dzaba.HomeAccounting.Engine
             {
                 var monthReport = new MonthReport
                 {
-                    Date = month,
-                    MembersReports = memberNames
-                        .Select(m => new FamilyMemberReport
-                        {
-                            Id = m.Key,
-                            Name = m.Value
-                        })
-                        .ToList()
+                    Date = month
                 };
 
                 decimal income = 0;
@@ -87,9 +79,9 @@ namespace Dzaba.HomeAccounting.Engine
                 }
                 else
                 {
-                    income = CheckScheduledOperations(scheduledOperations, month, monthReport);
-                    income = await CheckOperationOverridesAsync(familyId, month, income, scheduledOperations, monthReport);
-                    income += await CheckOperationsAsync(familyId, month, monthReport);
+                    income = CheckScheduledOperations(scheduledOperations, month, monthReport, memberNames);
+                    income = await CheckOperationOverridesAsync(familyId, month, income, monthReport);
+                    income += await CheckOperationsAsync(familyId, month, monthReport, memberNames);
                     monthReport.Income = income;
                 }
 
@@ -109,58 +101,41 @@ namespace Dzaba.HomeAccounting.Engine
             return result.ToArray();
         }
 
-        private async Task<decimal> CheckOperationsAsync(int familyId, YearAndMonth month, MonthReport report)
+        private async Task<decimal> CheckOperationsAsync(int familyId, YearAndMonth month, MonthReport report, IReadOnlyDictionary<int, string> members)
         {
             var operations = await operationDal.GetOperationsAsync(familyId, month);
-            return CheckOperations(operations, report);
+            return CheckOperations(operations, report, members);
         }
 
-        private decimal CheckOperations(IEnumerable<IOperation> operations, MonthReport report)
+        private decimal CheckOperations(IEnumerable<IOperation> operations, MonthReport report, IReadOnlyDictionary<int, string> members)
         {
             decimal income = 0;
 
             foreach (var operation in operations)
             {
+                var operationReport = operation.ToOperationReport(report.Date);
+
                 if (operation.MemberId.HasValue)
                 {
-                    var memberReport = report.MembersReports.FirstOrDefault(m => m.Id == operation.MemberId.Value);
-                    if (memberReport != null)
-                    {
-                        memberReport.Income += operation.Amount;
-                        memberReport.Operations.Add(operation.ToOperationReport());
-                    }
-                }
-                else
-                {
-                    report.Operations.Add(operation.ToOperationReport());
+                    var member = new KeyValuePair<int, string>(operation.MemberId.Value, members[operation.MemberId.Value]);                
+                    operationReport.Member = member;
                 }
 
+                report.Operations.Add(operationReport);
                 income += operation.Amount;
             }
 
             return income;
         }
 
-        private async Task<decimal> CheckOperationOverridesAsync(int familyId, YearAndMonth month, decimal income, ScheduledOperation[] scheduledOperations, MonthReport report)
+        private async Task<decimal> CheckOperationOverridesAsync(int familyId, YearAndMonth month,
+            decimal income, MonthReport report)
         {
             var currentIncome = income;
             var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(familyId, month);
             foreach (var overrideEntry in overrides)
             {
-                if (overrideEntry.MemberId.HasValue)
-                {
-                    var memberReport = report.MembersReports.FirstOrDefault(m => m.Id == overrideEntry.MemberId.Value);
-                    if (memberReport != null)
-                    {
-                        memberReport.Income = OverrideAmount(memberReport.Income, overrideEntry);
-                        OverrideOperation(memberReport.Operations, overrideEntry);
-                    }
-                }
-                else
-                {
-                    OverrideOperation(report.Operations, overrideEntry);
-                }
-
+                OverrideOperation(report.Operations, overrideEntry);
                 currentIncome = OverrideAmount(currentIncome, overrideEntry);
             }
 
@@ -185,10 +160,11 @@ namespace Dzaba.HomeAccounting.Engine
             }
         }
 
-        private decimal CheckScheduledOperations(ScheduledOperation[] scheduledOperations, YearAndMonth month, MonthReport report)
+        private decimal CheckScheduledOperations(ScheduledOperation[] scheduledOperations, YearAndMonth month,
+            MonthReport report, IReadOnlyDictionary<int, string> members)
         {
             var monthlyScheduledOperations = scheduledOperations.Where(o => IsActive(o, month.ToDateTime()));
-            return CheckOperations(monthlyScheduledOperations, report);
+            return CheckOperations(monthlyScheduledOperations, report, members);
         }
 
         private bool IsActive(ScheduledOperation operation, DateTime month)

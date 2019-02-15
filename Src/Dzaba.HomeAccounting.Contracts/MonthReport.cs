@@ -13,7 +13,5 @@ namespace Dzaba.HomeAccounting.Contracts
         public decimal Sum { get; set; }
 
         public List<OperationReport> Operations { get; set; } = new List<OperationReport>();
-
-        public List<FamilyMemberReport> MembersReports { get; set; } = new List<FamilyMemberReport>();
     }
 }

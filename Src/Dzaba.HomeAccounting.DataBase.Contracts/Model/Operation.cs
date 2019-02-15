@@ -27,7 +27,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public virtual FamilyMember Member { get; set; }
 
-        public OperationReport ToOperationReport()
+        public OperationReport ToOperationReport(YearAndMonth currentMonth)
         {
             return new OperationReport
             {

@@ -16,6 +16,6 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         FamilyMember Member { get; set; }
 
-        OperationReport ToOperationReport();
+        OperationReport ToOperationReport(YearAndMonth currentMonth);
     }
 }

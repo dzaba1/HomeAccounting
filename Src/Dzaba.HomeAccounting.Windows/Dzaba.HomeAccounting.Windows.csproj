@@ -205,6 +205,7 @@
     <Compile Include="Model\NavigationFacade.cs" />
     <Compile Include="ViewModel\BreadcrumbService.cs" />
     <Compile Include="ViewModel\FamilyMainViewModel.cs" />
+    <Compile Include="ViewModel\IncomesViewModel.cs" />
     <Compile Include="ViewModel\IncomeViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MembersViewModel.cs" />
@@ -220,6 +221,9 @@
     </Compile>
     <Compile Include="View\FamilyMainView.xaml.cs">
       <DependentUpon>FamilyMainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IncomesView.xaml.cs">
+      <DependentUpon>IncomesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\IncomeView.xaml.cs">
       <DependentUpon>IncomeView.xaml</DependentUpon>
@@ -262,6 +266,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\FamilyMainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\IncomesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,9 +19,19 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Margin="6"
+                   Grid.Column="0" Grid.ColumnSpan="2"
                    Text="{Binding Path=Report.PrettyName}"
                    FontSize="18" />
+
+        <local:IncomesView Grid.Row="1" Grid.Column="0"
+                           DataContext="{Binding Path=Incomes}" />
+        <local:IncomesView Grid.Row="1" Grid.Column="1"
+                           DataContext="{Binding Path=Expenses}" />
     </Grid>
 </UserControl>
