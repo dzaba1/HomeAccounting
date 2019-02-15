@@ -52,7 +52,7 @@ namespace Dzaba.HomeAccounting.IntegrationTests
                 FamilyId = familyId,
                 MemberId = memberId,
                 Name = name,
-                Starts = starts,
+                Date = starts,
                 Ends = ends
             });
         }

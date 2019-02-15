@@ -22,11 +22,14 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         [MaxLength(64)]
         public string Name { get; set; }
 
+        public bool HasConstantDate { get; set; }
+
         public int? MemberId { get; set; }
 
         public virtual FamilyMember Member { get; set; }
 
-        public DateTime? Starts { get; set; }
+        [Column("Starts")]
+        public DateTime? Date { get; set; }
 
         public DateTime? Ends { get; set; }
 
@@ -34,7 +37,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public OperationReport ToOperationReport(YearAndMonth currentMonth)
         {
-            var day = Starts.HasValue ? Starts.Value.Day : 1;
+            var day = Date.HasValue ? Date.Value.Day : 1;
 
             return new OperationReport
             {

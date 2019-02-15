@@ -1,4 +1,5 @@
 ﻿using Dzaba.HomeAccounting.Contracts;
+using System;
 
 namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 {
@@ -15,6 +16,10 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         int? MemberId { get; set; }
 
         FamilyMember Member { get; set; }
+
+        bool HasConstantDate { get; set; }
+
+        DateTime? Date { get; }
 
         OperationReport ToOperationReport(YearAndMonth currentMonth);
     }

@@ -232,9 +232,9 @@ namespace Dzaba.HomeAccounting.Engine
         {
             bool isActive = true;
 
-            if (operation.Starts.HasValue)
+            if (operation.Date.HasValue)
             {
-                isActive = comparer.Compare(month, operation.Starts.Value) >= 0;
+                isActive = comparer.Compare(month, operation.Date.Value) >= 0;
             }
 
             if (isActive && operation.Ends.HasValue)
@@ -274,6 +274,16 @@ namespace Dzaba.HomeAccounting.Engine
             {
                 yield return current;
                 current = current.AddMonths(1);
+            }
+        }
+
+        private IEnumerable<DateTime> EnumerateDays(YearAndMonth month)
+        {
+            var current = new DateTime(month.Year, month.Month, 1);
+            while (current.Month == month.Month)
+            {
+                yield return current;
+                current = current.AddDays(1);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Configuration;
-using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Linq;
 
 namespace Dzaba.HomeAccounting.DataBase.EntityFramework
 {
-    internal class DatabaseContext : DbContext
+    public class DatabaseContext : DbContext
     {
         private readonly IEntityConfiguration[] entityConfigurations;
 
@@ -42,5 +41,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
         public DbSet<ScheduledOperation> ScheduledOperations { get; set; }
 
         public DbSet<ScheduledOperationOverride> ScheduledOperationOverrides { get; set; }
+
+        public DbSet<DatabaseData> DatabaseData { get; set; }
     }
 }

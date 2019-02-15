@@ -18,10 +18,15 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public DateTime Date { get; set; }
 
+        [NotMapped]
+        DateTime? IOperation.Date => Date;
+
         public decimal Amount { get; set; }
 
         [MaxLength(64)]
         public string Name { get; set; }
+
+        public bool HasConstantDate { get; set; }
 
         public int? MemberId { get; set; }
 

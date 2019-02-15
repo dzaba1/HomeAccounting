@@ -1,4 +1,6 @@
-﻿using Dzaba.HomeAccounting.Utils;
+﻿using Dzaba.HomeAccounting.DataBase.Contracts.Migration;
+using Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite.Migration;
+using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using Ninject;
 
@@ -11,6 +13,8 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite
             Require.NotNull(container, nameof(container));
 
             container.RegisterTransient<IEntityFrameworkProvider, SqliteProvider>();
+            container.RegisterTransient<IMigration<DatabaseContext>, DatabaseDataMigration>();
+            container.RegisterTransient<IMigration<DatabaseContext>, HasConstantDateMigration>();
         }
     }
 }

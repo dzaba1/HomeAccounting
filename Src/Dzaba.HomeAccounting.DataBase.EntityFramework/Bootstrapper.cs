@@ -1,7 +1,9 @@
 ﻿using Dzaba.HomeAccounting.DataBase.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
+using Dzaba.HomeAccounting.DataBase.Contracts.Migration;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.Configuration;
 using Dzaba.HomeAccounting.DataBase.EntityFramework.DAL;
+using Dzaba.HomeAccounting.DataBase.EntityFramework.Migration;
 using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +32,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
             container.RegisterTransient<IOperationDal, OperationDal>();
             container.RegisterTransient<IScheduledOperationDal, ScheduledOperationDal>();
             container.RegisterTransient<IFamilyMembersDal, FamilyMembersDal>();
+            container.RegisterTransient<IMigrationManager<DatabaseContext>, MigrationManager>();
 
             RegisterDbContext(container);
         }
@@ -50,12 +53,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework
                 .InTransientScope();
 
             container.Bind<Func<DatabaseContext>>()
-                .ToMethod(c => () =>
-                {
-                    var dbContext = c.Kernel.Get<DatabaseContext>();
-                    dbContext.Database.EnsureCreated();
-                    return dbContext;
-                })
+                .ToMethod(c => () => c.Kernel.Get<DatabaseContext>())
                 .InTransientScope();
         }
 

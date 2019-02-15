@@ -86,7 +86,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             {
                 Id = o.Id,
                 Amount = o.Amount,
-                Date = o.Starts,
+                Date = o.Date,
                 Ends = o.Ends,
                 Member = GetMemberPair(o.MemberId),
                 Name = o.Name,
@@ -290,7 +290,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             var entity = new ScheduledOperation
             {
                 Amount = Editable.Amount,
-                Starts = Editable.Date,
+                Date = Editable.Date,
                 Ends = Editable.Ends,
                 FamilyId = Id,
                 MemberId = Editable.Member.Id,
