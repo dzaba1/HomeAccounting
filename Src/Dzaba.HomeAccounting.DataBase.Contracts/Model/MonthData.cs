@@ -1,5 +1,4 @@
 ﻿using Dzaba.HomeAccounting.Contracts;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dzaba.HomeAccounting.DataBase.Contracts.Model

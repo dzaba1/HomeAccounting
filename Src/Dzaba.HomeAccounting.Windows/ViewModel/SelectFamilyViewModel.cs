@@ -5,10 +5,10 @@ using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.Utils;
 using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm.Windows;
-using Dzaba.Mvvm.Windows.Navigation;
 using Dzaba.Utils;
 using Dzaba.HomeAccounting.Windows.Model;
 using System.Linq;
+using Dzaba.HomeAccounting.DataBase.Contracts;
 
 namespace Dzaba.HomeAccounting.Windows.ViewModel
 {
@@ -17,18 +17,22 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         private readonly IInteractionService interaction;
         private readonly IFamilyDal familyDal;
         private readonly INavigationFacade navigation;
+        private readonly IDbInitializer dbInitializer;
 
         public SelectFamilyViewModel(IInteractionService interaction,
             IFamilyDal familyDal,
-            INavigationFacade navigation)
+            INavigationFacade navigation,
+            IDbInitializer dbInitializer)
         {
             Require.NotNull(interaction, nameof(interaction));
             Require.NotNull(familyDal, nameof(familyDal));
             Require.NotNull(navigation, nameof(navigation));
+            Require.NotNull(dbInitializer, nameof(dbInitializer));
 
             this.interaction = interaction;
             this.familyDal = familyDal;
             this.navigation = navigation;
+            this.dbInitializer = dbInitializer;
         }
 
         private string _newFamilyName;
@@ -94,6 +98,7 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             try
             {
                 FamiliesListLoading = true;
+                await dbInitializer.InitializeAsync();
                 var families = await familyDal.GetAllNamesAsync();
                 Families = new ConcurrentObservableCollection<KeyValuePair<int, string>>(families);
             }

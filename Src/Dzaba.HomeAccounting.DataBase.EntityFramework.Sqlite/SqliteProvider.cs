@@ -1,5 +1,4 @@
-﻿using Dzaba.HomeAccounting.Utils;
-using Dzaba.Utils;
+﻿using Dzaba.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite
