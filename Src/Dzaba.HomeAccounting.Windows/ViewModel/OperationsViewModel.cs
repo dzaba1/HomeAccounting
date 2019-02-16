@@ -80,7 +80,9 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 Ends = null,
                 Member = GetMemberPair(o.MemberId),
                 Name = o.Name,
-                Scheduled = false
+                Scheduled = false,
+                DayDate = o.Date,
+                HasConstantDate = o.HasConstantDate
             });
             var operVm2 = oper2.Select(o => new OperationViewModel
             {
@@ -90,7 +92,9 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 Ends = o.Ends,
                 Member = GetMemberPair(o.MemberId),
                 Name = o.Name,
-                Scheduled = true
+                Scheduled = true,
+                DayDate = o.Starts.HasValue ? o.Starts.Value : (DateTime?)null,
+                HasConstantDate = o.HasConstantDate
             });
 
             return operVm1.Concat(operVm2)
@@ -294,7 +298,9 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 Ends = Editable.Ends,
                 FamilyId = Id,
                 MemberId = Editable.Member.Id,
-                Name = Editable.Name
+                Name = Editable.Name,
+                HasConstantDate = Editable.HasConstantDate,
+                Day = Editable.DayDate.HasValue ? Editable.DayDate.Value.Day : (int?)null
             };
 
             if (Editable.Id.HasValue)
@@ -313,7 +319,8 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 Date = Editable.Date.Value,
                 FamilyId = Id,
                 MemberId = Editable.Member.Id,
-                Name = Editable.Name
+                Name = Editable.Name,
+                HasConstantDate = Editable.HasConstantDate
             };
 
             if (Editable.Id.HasValue)

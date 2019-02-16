@@ -82,8 +82,34 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
             {
                 _scheduled = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(DayDateEnabled));
             }
         }
+
+        private bool _hasConstantDate;
+        public bool HasConstantDate
+        {
+            get { return _hasConstantDate; }
+            set
+            {
+                _hasConstantDate = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(DayDateEnabled));
+            }
+        }
+
+        private DateTime? _dayDate;
+        public DateTime? DayDate
+        {
+            get { return _dayDate; }
+            set
+            {
+                _dayDate = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool DayDateEnabled => Scheduled && HasConstantDate;
 
         public bool CanChangeType => !Id.HasValue;
     }

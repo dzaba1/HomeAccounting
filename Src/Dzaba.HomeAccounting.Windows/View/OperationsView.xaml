@@ -26,11 +26,13 @@
                   SelectedItem="{Binding Path=SelectedOperation}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Data" Binding="{Binding Path=Date, Converter={StaticResource StringFormatConverter}, ConverterParameter=d}" />
-                <DataGridTextColumn Header="Nazwa" Binding="{Binding Path=Name}" />
+                <DataGridTextColumn Header="Nazwa" Width="*" Binding="{Binding Path=Name}" />
                 <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
                 <DataGridTextColumn Header="Członek" Binding="{Binding Path=Member.Name}" />
                 <DataGridCheckBoxColumn Header="Miesięczna" Binding="{Binding Path=Scheduled}" />
                 <DataGridTextColumn Header="Kończy się" Binding="{Binding Path=Ends, Converter={StaticResource StringFormatConverter}, ConverterParameter=d}" />
+                <DataGridCheckBoxColumn Header="Stały dzień" Binding="{Binding Path=HasConstantDate}" />
+                <DataGridTextColumn Header="Dzień" Binding="{Binding Path=DayDate.Day}" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -66,6 +68,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -75,8 +79,7 @@
                        Style="{StaticResource TextBlockStyle}"
                        Text="Data:" />
             <DatePicker Grid.Row="0" Grid.Column="1"
-                        Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                        FirstDayOfWeek="Monday"
+                        Style="{StaticResource DatePickerStyle}"
                         SelectedDate="{Binding Path=Date, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource TextBlockStyle}"
@@ -100,20 +103,32 @@
                       SelectedItem="{Binding Path=Member}"/>
             <TextBlock Grid.Row="4" Grid.Column="0"
                        Style="{StaticResource TextBlockStyle}"
-                       Text="Miesięczna:" />
+                       Text="Stały dzień:" />
             <CheckBox Grid.Row="4" Grid.Column="1"
-                      VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="3"
-                      IsChecked="{Binding Path=Scheduled}"
-                      IsEnabled="{Binding Path=CanChangeType}"/>
+                      Style="{StaticResource CheckBoxStyle}"
+                      IsChecked="{Binding Path=HasConstantDate}" />
             <TextBlock Grid.Row="5" Grid.Column="0"
                        Style="{StaticResource TextBlockStyle}"
+                       Text="Miesięczna:" />
+            <CheckBox Grid.Row="5" Grid.Column="1"
+                      Style="{StaticResource CheckBoxStyle}"
+                      IsChecked="{Binding Path=Scheduled}" />
+            <TextBlock Grid.Row="6" Grid.Column="0"
+                       Style="{StaticResource TextBlockStyle}"
                        Text="Kończy się:" />
-            <DatePicker Grid.Row="5" Grid.Column="1"
-                        Margin="3" VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                        IsEnabled="{Binding Path=Scheduled}" FirstDayOfWeek="Monday"
+            <DatePicker Grid.Row="6" Grid.Column="1"
+                        Style="{StaticResource DatePickerStyle}"
+                        IsEnabled="{Binding Path=Scheduled}"
                         SelectedDate="{Binding Path=Ends}"/>
+            <TextBlock Grid.Row="7" Grid.Column="0"
+                       Style="{StaticResource TextBlockStyle}"
+                       Text="Dzień miesiąca:" />
+            <DatePicker Grid.Row="7" Grid.Column="1"
+                        Style="{StaticResource DatePickerStyle}"
+                        IsEnabled="{Binding Path=DayDateEnabled}"
+                        SelectedDate="{Binding Path=DayDate}"/>
             <StackPanel Orientation="Horizontal"
-                        Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                        Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
                         VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Margin="3" MinWidth="60"
                         Content="Zmień"

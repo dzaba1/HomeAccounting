@@ -17,4 +17,15 @@
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
     </Style>
+    <Style TargetType="CheckBox" x:Key="CheckBoxStyle">
+        <Setter Property="Margin" Value="3" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    <Style TargetType="DatePicker" x:Key="DatePickerStyle">
+        <Setter Property="Margin" Value="3" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="FirstDayOfWeek" Value="Monday" />
+    </Style>
 </ResourceDictionary>
