@@ -22,8 +22,8 @@ namespace Dzaba.HomeAccounting.IntegrationTests
 
             var sut = CreateSut();
             var result = await sut.CalculateAsync(familyId, today, today.AddMonths(2));
-            result.FamilyId.Should().Be(familyId);
-            result.FamilyName.Should().Be("Smith");
+            result.Family.Key.Should().Be(familyId);
+            result.Family.Value.Should().Be("Smith");
             result.Reports.Length.Should().Be(3);
             result.Reports.Last().Sum.Should().Be(30);
             result.Reports.All(x => x.Income == 10).Should().BeTrue();
@@ -43,8 +43,8 @@ namespace Dzaba.HomeAccounting.IntegrationTests
 
             var sut = CreateSut();
             var result = await sut.CalculateAsync(familyId, today, today.AddMonths(2));
-            result.FamilyId.Should().Be(familyId);
-            result.FamilyName.Should().Be("Smith");
+            result.Family.Key.Should().Be(familyId);
+            result.Family.Value.Should().Be("Smith");
             result.Reports.Length.Should().Be(3);
             result.Reports.Last().Sum.Should().Be(130);
         }

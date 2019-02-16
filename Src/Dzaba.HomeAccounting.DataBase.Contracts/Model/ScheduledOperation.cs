@@ -38,7 +38,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public OperationReport ToOperationReport(YearAndMonth currentMonth)
         {
-            var day = Starts.HasValue ? Starts.Value.Day : 1;
+            var day = Day.HasValue ? Day.Value : 1;
 
             return new OperationReport
             {

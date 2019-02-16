@@ -1,6 +1,7 @@
 ﻿using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
+using Dzaba.HomeAccounting.Utils;
 using Dzaba.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,9 @@ namespace Dzaba.HomeAccounting.Engine
 {
     public interface IIncomeEngine
     {
-        Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end);
-        Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth month);
+        Task<MonthlyFamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end);
+        Task<MonthlyFamilyReport> CalculateAsync(int familyId, YearAndMonth month);
+        Task<DailyFamilyReport> CalculateDailyAsync(int familyId, YearAndMonth month, decimal initialSavings);
     }
 
     internal sealed class IncomeEngine : IIncomeEngine
@@ -43,29 +45,40 @@ namespace Dzaba.HomeAccounting.Engine
             this.familyMembersDal = familyMembersDal;
         }
 
-        public async Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end)
+        public async Task<MonthlyFamilyReport> CalculateAsync(int familyId, YearAndMonth start, YearAndMonth end)
         {
             var reportTask = CalculateReportsAsync(familyId, start, end);
             var familyTask = familyDal.GetNameAsync(familyId);
 
-            return new FamilyReport
+            return new MonthlyFamilyReport
             {
                 Reports = await reportTask,
-                FamilyId = familyId,
-                FamilyName = await familyTask
+                Family = new KeyValuePair<int, string>(familyId, await familyTask)
             };
         }
 
-        public async Task<FamilyReport> CalculateAsync(int familyId, YearAndMonth month)
+        public async Task<MonthlyFamilyReport> CalculateAsync(int familyId, YearAndMonth month)
         {
             var reportTask = CalculateReportAsync(familyId, month);
             var familyTask = familyDal.GetNameAsync(familyId);
 
-            return new FamilyReport
+            return new MonthlyFamilyReport
             {
                 Reports = new[] { await reportTask },
-                FamilyId = familyId,
-                FamilyName = await familyTask
+                Family = new KeyValuePair<int, string>(familyId, await familyTask)
+            };
+        }
+
+        public async Task<DailyFamilyReport> CalculateDailyAsync(int familyId, YearAndMonth month, decimal initialSavings)
+        {
+            var familyTask = familyDal.GetNameAsync(familyId);
+            var reportTask = CalculateDailyReportsAsync(familyId, month, initialSavings);
+
+            return new DailyFamilyReport
+            {
+                Month = month,
+                Family = new KeyValuePair<int, string>(familyId, await familyTask),
+                Reports = await reportTask
             };
         }
 
@@ -126,6 +139,86 @@ namespace Dzaba.HomeAccounting.Engine
             decimal income = await CalculateIncomeAsync(monthData, data);
             CheckSum(monthData, income, income);
             return monthData.MonthReport;
+        }
+
+        private async Task<DayReport[]> CalculateDailyReportsAsync(int familyId, YearAndMonth month, decimal initialSavings)
+        {
+            var oneTimeOperations = await operationDal.GetOperationsAsync(familyId, month);
+            var overrides = await scheduledOperationDal.GetOverridesForMonthAsync(familyId, month);
+            var days = EnumerateDays(month).ToArray();
+            var result = new List<DayReport>(days.Length);
+            var sum = initialSavings;
+
+            var scheduledOperations = (await scheduledOperationDal.GetAllAsync(familyId))
+                .Where(o => IsActive(o, month.ToDateTime()))
+                .ToArray();
+
+            var notConstantOneTimeOperations = oneTimeOperations
+                .Where(o => !o.HasConstantDate)
+                .ToArray();
+
+            var notConstantScheduledOperations = scheduledOperations
+                .Where(o => !o.HasConstantDate)
+                .ToArray();
+
+            foreach (var day in days)
+            {
+                var report = new DayReport
+                {
+                    Day = day.Day
+                };
+
+                var oneTimeDailyOperations = oneTimeOperations
+                    .Where(o => o.HasConstantDate && o.Date == day)
+                    .Select(o => o.ToOperationReport(month));
+
+                var scheduledDailyOperations = scheduledOperations
+                    .Where(o => o.HasConstantDate && o.Day.HasValue && o.Day.Value == day.Day)
+                    .Select(o => o.ToOperationReport(month))
+                    .ForEachLazy(o => CheckOverrides(o, overrides, month));
+
+                var notConstantOneTimeDailyOperations = notConstantOneTimeOperations
+                    .Select(o => o.ToOperationReport(month));
+
+                var notConstantScheduledDailyOperations = notConstantScheduledOperations
+                    .Select(o => o.ToOperationReport(month))
+                    .ForEachLazy(o => CheckOverrides(o, overrides, month));
+
+                var notConstantOpers = notConstantOneTimeDailyOperations
+                    .Concat(notConstantScheduledDailyOperations)
+                    .ForEachLazy(o =>
+                    {
+                        o.Amount = o.Amount / (decimal)days.Length;
+                        o.Date = day;
+                    });
+
+                var opers = oneTimeDailyOperations
+                    .Concat(scheduledDailyOperations)
+                    .Concat(notConstantOpers);
+
+                foreach (var oper in opers)
+                {
+                    report.Operations.Add(oper);
+                    report.Income += oper.Amount;
+                }
+
+                sum += report.Income;
+                report.Sum = sum;
+
+                result.Add(report);
+            }
+
+            return result.ToArray();
+        }
+
+        private void CheckOverrides(OperationReport report, OperationOverride[] overrides, YearAndMonth month)
+        {
+            var operOverride = overrides.FirstOrDefault(ov => ov.OperationId == report.Id && ov.Month == month);
+            if (operOverride != null)
+            {
+                report.Amount = operOverride.Amount;
+                report.IsOverriden = true;
+            }
         }
 
         private decimal CheckSum(CurrentMonthData monthData, decimal currentSum, decimal income)

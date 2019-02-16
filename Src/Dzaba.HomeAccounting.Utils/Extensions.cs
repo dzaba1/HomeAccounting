@@ -18,5 +18,17 @@ namespace Dzaba.HomeAccounting.Utils
                 collection.Remove(element);
             }
         }
+
+        public static IEnumerable<T> ForEachLazy<T>(this IEnumerable<T> collection, Action<T> action)
+        {
+            Require.NotNull(collection, nameof(collection));
+            Require.NotNull(action, nameof(action));
+
+            return collection.Select(x =>
+            {
+                action(x);
+                return x;
+            });
+        }
     }
 }
