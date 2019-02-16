@@ -7,6 +7,7 @@ using Dzaba.HomeAccounting.Contracts;
 using Dzaba.HomeAccounting.DataBase.Contracts.DAL;
 using Dzaba.HomeAccounting.DataBase.Contracts.Model;
 using Dzaba.HomeAccounting.Engine;
+using Dzaba.HomeAccounting.Utils;
 using Dzaba.HomeAccounting.Windows.Model;
 using Dzaba.HomeAccounting.Windows.View;
 using Dzaba.Mvvm;
@@ -270,7 +271,20 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
         {
             try
             {
-                navigation.ShowView<MonthView>(report.PrettyName, report);
+                var parameter = new MonthIncomesParameter
+                {
+                    Report = report,
+                    InitialSavings = 0,
+                    FamilyId = Id
+                };
+
+                var index = Report.IndexOf(report);
+                if (index > 0)
+                {
+                    parameter.InitialSavings = Report[index - 1].Report.Sum;
+                }
+
+                navigation.ShowView<MonthView>(report.PrettyName, parameter);
             }
             catch (Exception ex)
             {

@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Dzaba.HomeAccounting.Windows.View.DailyIncomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mvvmView="clr-namespace:Dzaba.Mvvm.Windows.View;assembly=Dzaba.Mvvm.Windows"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=LoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <DataGrid Grid.Column="0"
+                  CanUserSortColumns="False"
+                  Style="{StaticResource ReadOnlyDataGridStyle}"
+                  ItemsSource="{Binding Path=Report}"
+                  SelectedItem="{Binding Path=SelectedReport}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Dzień" Binding="{Binding Path=Day, Converter={StaticResource StringFormatConverter}, ConverterParameter=d}" />
+                <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Income, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
+                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Sum, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <DataGrid Grid.Row="0"
+                  Style="{StaticResource ReadOnlyDataGridStyle}"
+                  ItemsSource="{Binding SelectedReport.Operations, Mode=OneWay}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Nazwa" Width="*" Binding="{Binding Path=Name}" />
+                    <DataGridTextColumn Header="Kwota" Binding="{Binding Path=Amount, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
+                    <DataGridCheckBoxColumn Header="Miesięczna" Binding="{Binding Path=IsScheduled}" />
+                    <DataGridCheckBoxColumn Header="Nadpisana" Binding="{Binding Path=IsOverriden}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        
+        <mvvmView:LongOperationView Grid.Column="0" Grid.ColumnSpan="2"
+                                    Message="Ładowanie" Show="{Binding Path=Loading}" />
+    </Grid>
+</UserControl>

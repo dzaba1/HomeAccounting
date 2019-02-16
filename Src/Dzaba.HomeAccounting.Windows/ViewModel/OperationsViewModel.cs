@@ -93,13 +93,28 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
                 Member = GetMemberPair(o.MemberId),
                 Name = o.Name,
                 Scheduled = true,
-                DayDate = o.Starts.HasValue ? o.Starts.Value : (DateTime?)null,
+                DayDate = GetDayDate(o),
                 HasConstantDate = o.HasConstantDate
             });
 
             return operVm1.Concat(operVm2)
                 .OrderBy(o => o.Date)
                 .ToArray();
+        }
+
+        private DateTime? GetDayDate(ScheduledOperation o)
+        {
+            if (o.Day.HasValue)
+            {
+                if (o.Starts.HasValue)
+                {
+                    return new DateTime(o.Starts.Value.Year, o.Starts.Value.Month, o.Day.Value);
+                }
+
+                return new DateTime(DateTime.Today.Year, DateTime.Today.Month, o.Day.Value);
+            }
+
+            return null;
         }
 
         private MemberNamePair GetMemberPair(int? memberId)

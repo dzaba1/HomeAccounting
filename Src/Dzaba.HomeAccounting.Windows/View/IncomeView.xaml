@@ -51,7 +51,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Miesiąc" Binding="{Binding Path=Date}" />
                 <DataGridTextColumn Header="Przychód" Binding="{Binding Path=Report.Income, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
-                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Report.Sum, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}" />
+                <DataGridTextColumn Header="Suma" Binding="{Binding Path=Report.Sum, Converter={StaticResource StringFormatConverter}, ConverterParameter=c}"
+                                    Width="*"/>
             </DataGrid.Columns>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">

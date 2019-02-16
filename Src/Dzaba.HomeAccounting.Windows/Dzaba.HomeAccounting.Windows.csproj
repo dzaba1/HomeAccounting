@@ -202,8 +202,10 @@
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Model\Crumb.cs" />
     <Compile Include="Model\MemberNamePair.cs" />
+    <Compile Include="Model\MonthIncomesParameter.cs" />
     <Compile Include="Model\NavigationFacade.cs" />
     <Compile Include="ViewModel\BreadcrumbService.cs" />
+    <Compile Include="ViewModel\DailyIncomeViewModel.cs" />
     <Compile Include="ViewModel\FamilyMainViewModel.cs" />
     <Compile Include="ViewModel\IncomesViewModel.cs" />
     <Compile Include="ViewModel\IncomeViewModel.cs" />
@@ -218,6 +220,9 @@
     <Compile Include="ViewModel\SelectFamilyViewModel.cs" />
     <Compile Include="View\BreadcrumbView.xaml.cs">
       <DependentUpon>BreadcrumbView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DailyIncomeView.xaml.cs">
+      <DependentUpon>DailyIncomeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FamilyMainView.xaml.cs">
       <DependentUpon>FamilyMainView.xaml</DependentUpon>
@@ -262,6 +267,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\BreadcrumbView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DailyIncomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

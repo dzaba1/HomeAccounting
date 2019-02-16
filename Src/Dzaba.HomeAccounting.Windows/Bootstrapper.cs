@@ -44,6 +44,7 @@ namespace Dzaba.HomeAccounting.Windows
             container.RegisterView<OperationOverridesView, OperationOverridesViewModel>();
             container.RegisterView<MonthView, MonthViewModel>();
             container.RegisterView<IncomesView, IncomesViewModel>();
+            container.RegisterView<DailyIncomeView, DailyIncomeViewModel>();
             container.RegisterViewModel<BreadcrumbService>(true);
             container.Bind<IBreadcrumbService>()
                 .ToMethod(c => c.Kernel.Get<BreadcrumbService>())

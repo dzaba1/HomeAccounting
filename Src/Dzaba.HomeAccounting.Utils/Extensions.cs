@@ -30,5 +30,12 @@ namespace Dzaba.HomeAccounting.Utils
                 return x;
             });
         }
+
+        public static int IndexOf<T>(this T[] array, T element)
+        {
+            Require.NotNull(array, nameof(array));
+
+            return Array.IndexOf(array, element);
+        }
     }
 }

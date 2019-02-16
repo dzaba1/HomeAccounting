@@ -1,4 +1,5 @@
-﻿using Dzaba.Mvvm;
+﻿using Dzaba.HomeAccounting.Windows.Model;
+using Dzaba.Mvvm;
 using Dzaba.Mvvm.Navigation;
 using System.Linq;
 
@@ -6,20 +7,23 @@ namespace Dzaba.HomeAccounting.Windows.ViewModel
 {
     internal sealed class MonthViewModel : BaseViewModel, INavigatable
     {
-        private MonthReportViewModel _report;
-        public MonthReportViewModel Report
+        private MonthIncomesParameter _monthParameter;
+        public MonthIncomesParameter MonthParameter
         {
-            get { return _report; }
+            get { return _monthParameter; }
             private set
             {
-                _report = value;
+                _monthParameter = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Report));
             }
         }
 
+        public MonthReportViewModel Report => MonthParameter.Report;
+
         public void OnNavigate(object parameter)
         {
-            Report = (MonthReportViewModel)parameter;
+            MonthParameter = (MonthIncomesParameter)parameter;
             Incomes = new IncomesViewModel("Przychody", Report.Report.Operations.Where(o => o.Amount >= 0).OrderBy(o => o.Date));
             Expenses = new IncomesViewModel("Wydatki", Report.Report.Operations.Where(o => o.Amount < 0).OrderBy(o => o.Date));
         }
