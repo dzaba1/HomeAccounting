@@ -32,10 +32,9 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
 
         public DateTime? Ends { get; set; }
 
-        [NotMapped]
-        public DateTime? DayDate => Starts;
-
         public virtual ICollection<ScheduledOperationOverride> Overrides { get; set; }
+
+        public int? Day { get; set; }
 
         public OperationReport ToOperationReport(YearAndMonth currentMonth)
         {

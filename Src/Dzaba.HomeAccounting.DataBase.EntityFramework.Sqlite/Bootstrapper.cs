@@ -15,6 +15,7 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite
             container.RegisterTransient<IEntityFrameworkProvider, SqliteProvider>();
             container.RegisterTransient<IMigration<DatabaseContext>, DatabaseDataMigration>();
             container.RegisterTransient<IMigration<DatabaseContext>, HasConstantDateMigration>();
+            container.RegisterTransient<IMigration<DatabaseContext>, DayMigration>();
         }
     }
 }

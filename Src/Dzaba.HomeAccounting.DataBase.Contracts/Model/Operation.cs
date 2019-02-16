@@ -19,7 +19,7 @@ namespace Dzaba.HomeAccounting.DataBase.Contracts.Model
         public DateTime Date { get; set; }
 
         [NotMapped]
-        public DateTime? DayDate => Date;
+        public int? Day => Date.Day;
 
         public decimal Amount { get; set; }
 
