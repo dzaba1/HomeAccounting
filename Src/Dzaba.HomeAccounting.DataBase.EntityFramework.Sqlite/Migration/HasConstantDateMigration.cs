@@ -11,10 +11,10 @@ namespace Dzaba.HomeAccounting.DataBase.EntityFramework.Sqlite.Migration
 
         public override async Task MigrateAsync(DatabaseContext context)
         {
-            var sql = $@"ALTER TABLE ""Operations"" ADD COLUMN ""HasConstantDate"" INTEGER NOT NULL DEFAULT 0";
+            var sql = $@"ALTER TABLE ""Operations"" ADD COLUMN ""HasConstantDate"" INTEGER NOT NULL DEFAULT 1";
             await context.Database.ExecuteSqlCommandAsync(sql);
 
-            sql = $@"ALTER TABLE ""ScheduledOperations"" ADD COLUMN ""HasConstantDate"" INTEGER NOT NULL DEFAULT 0";
+            sql = $@"ALTER TABLE ""ScheduledOperations"" ADD COLUMN ""HasConstantDate"" INTEGER NOT NULL DEFAULT 1";
             await context.Database.ExecuteSqlCommandAsync(sql);
         }
     }
